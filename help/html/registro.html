@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Usuarios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(90deg, #2563eb, #1e40af);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+            header h1 {
+                margin: 0;
+                font-size: 2em;
+            }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #2563eb;
+            margin-top: 0;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+            ul li::before {
+                content: "✔️ ";
+                color: #10b981;
+            }
+
+        img {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .note {
+            background: #fff7ed;
+            border-left: 5px solid #f97316;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 6px;
+            color: #92400e;
+        }
+
+        .links a {
+            display: inline-block;
+            margin: 5px 0;
+            padding: 8px 12px;
+            background: #2563eb;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+            .links a:hover {
+                background: #1e40af;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Registro de Usuarios</h1>
+        <p>Crea tu cuenta para acceder a la aplicación de peluquería canina</p>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Descripción</h2>
+            <p>
+                Esta ventana permite crear una nueva cuenta para acceder a la aplicación de peluquería canina.
+                Si aún no estás registrado, completa el formulario con tus datos personales y credenciales de acceso.
+            </p>
+            <div class="note">
+                ⚠️ Recuerda: todos los campos deben estar completos. Si falta alguno, el sistema mostrará un error y no permitirá continuar.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Roles disponibles</h2>
+            <ul>
+                <li><strong>Administrador:</strong> acceso completo, gestión de usuarios y privilegios.</li>
+                <li><strong>Recepcionista:</strong> puede registrar y consultar clientes.</li>
+                <li><strong>Trabajador:</strong> acceso limitado, principalmente consulta de clientes y mascotas.</li>
+            </ul>
+            <p>El rol será asignado por el administrador al momento de tu registro.</p>
+        </div>
+
+        <div class="card links">
+            <h2>Accesos rápidos</h2>
+            <p>Si ya tienes una cuenta, puedes volver a la ventana de inicio de sesión:</p>
+            <a href="login.html">Ir a la Ventana de Inicio de Sesión</a>
+        </div>
+
+        <div class="card">
+            <h2>Vista previa del formulario</h2>
+            <img src="Imagen/registro.png" alt="Pantalla de registro de usuarios" width="380" height="280" />
+        </div>
+    </div>
+</body>
+</html>

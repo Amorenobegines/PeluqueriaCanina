@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Guardar Cliente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(90deg, #2563eb, #1e40af);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+            header h1 {
+                margin: 0;
+                font-size: 2em;
+            }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #2563eb;
+            margin-top: 0;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+            ul li::before {
+                content: "👉 ";
+                color: #10b981;
+            }
+
+        img {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .note {
+            background: #fff7ed;
+            border-left: 5px solid #f97316;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 6px;
+            color: #92400e;
+        }
+
+        .links a {
+            display: inline-block;
+            margin: 5px 0;
+            padding: 8px 12px;
+            background: #2563eb;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+            .links a:hover {
+                background: #1e40af;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ventana: Guardar Cliente</h1>
+        <p>Registro de nuevos clientes y sus mascotas</p>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Descripción</h2>
+            <p>
+                En esta ventana podrás registrar un nuevo cliente, incluyendo los datos de la mascota y su dueño.
+                Es importante rellenar todos los campos obligatorios, ya que si alguno queda vacío la aplicación mostrará un error y no permitirá guardar la información.
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>Opciones disponibles</h2>
+            <ul>
+                <li><strong>Guardar:</strong> almacena los datos del cliente y su mascota en la base de datos.</li>
+                <li><strong>Volver al menú:</strong> puedes regresar a la ventana principal sin necesidad de guardar.</li>
+            </ul>
+            <div class="note">
+                ⚠️ Recuerda: si no completas todos los campos obligatorios, el sistema no permitirá guardar el cliente.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Vista previa del formulario</h2>
+            <img src="Imagen/guardarCliente.png" alt="Formulario Guardar Cliente" width="380" height="280" />
+        </div>
+
+        <div class="card links">
+            <h2>Accesos rápidos</h2>
+            <a href="principal.html">Volver al menú principal</a>
+            
+        </div>
+    </div>
+</body>
+</html>
+

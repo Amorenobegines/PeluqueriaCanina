@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio de Sesión</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(90deg, #2563eb, #1e40af);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+            header h1 {
+                margin: 0;
+                font-size: 2em;
+            }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        h2, h3 {
+            color: #2563eb;
+            margin-top: 0;
+        }
+
+        img {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .note {
+            background: #fff7ed;
+            border-left: 5px solid #f97316;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 6px;
+            color: #92400e;
+        }
+
+        .links a {
+            display: inline-block;
+            margin: 5px 0;
+            padding: 8px 12px;
+            background: #2563eb;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+            .links a:hover {
+                background: #1e40af;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Inicio de Sesión</h1>
+        <p>Accede al sistema de gestión de la peluquería canina</p>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Bienvenida</h2>
+            <p>Desde esta ventana podrás acceder al sistema si ya estás registrado o crear una nueva cuenta si aún no tienes usuario.</p>
+            <p>Para iniciar sesión, introduce tu correo de usuario y contraseña en el formulario correspondiente. Si los datos son correctos, accederás al menú principal de la aplicación. Dependiendo del rol asignado (Administrador, Recepcionista o Trabajador) se abrirá un menú u otro.</p>
+            <div class="note">
+                ⚠️ Recuerda: si introduces datos incorrectos, el sistema mostrará un error y no podrás acceder.
+            </div>
+        </div>
+
+        <div class="card links">
+            <h2>¿Aún no tienes cuenta?</h2>
+            <p>Haz clic en el siguiente enlace para la información de registros:</p>
+            <a href="registro.html">Ir a la Ventana de Registro</a>
+        </div>
+
+        <div class="card">
+            <h2>Vista previa de ventanas</h2>
+            <h3>Ventana Login</h3>
+            <img src="Imagen/login.png" alt="Pantalla de inicio de sesión" width="380" height="280" />
+
+            <h3>Ventana Principal (Administrador)</h3>
+            <p>El administrador tiene acceso completo: puede gestionar clientes, mascotas y usuarios.</p>
+            <img src="Imagen/Principal.png" alt="Ventana Principal Administrador" width="380" height="280" />
+            <p>
+                <a href="principal.html">Ir a la pantalla pricipal</a>
+            </p>
+                <h3>Ventana Principal (Recepcionista)</h3>
+            <p>En el modo recepcionista no aparece el apartado de Usuarios. Este rol no puede eliminar ni modificar clientes, solo registrarlos y consultarlos.</p>
+            <img src="Imagen/menuRecep.png" alt="Ventana Principal Recepcionista" width="380" height="280" />
+
+            <h3>Zona Empleado</h3>
+            <p>En el modo empleado solo se pueden ver o buscar los clientes registrados por el administrador o recepcionista. No se pueden modificar ni eliminar datos.</p>
+            <img src="Imagen/menuTrab.png" alt="Zona Trabajador" width="380" height="280" />
+        </div>
+    </div>
+</body>
+</html>

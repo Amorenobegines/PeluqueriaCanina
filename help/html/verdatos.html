@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión Mascotas</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(90deg, #2563eb, #1e40af);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+            header h1 {
+                margin: 0;
+                font-size: 2.2em;
+            }
+
+            header p {
+                margin: 5px 0 0;
+                font-size: 1.1em;
+                opacity: 0.9;
+            }
+
+        .container {
+            max-width: 950px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            color: #2563eb;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            h2::before {
+                content: "📌";
+            }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+            ul li {
+                margin: 8px 0;
+            }
+
+                ul li::before {
+                    content: "✔️ ";
+                    color: #10b981;
+                }
+
+        img {
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            margin: 15px 0;
+            max-width: 100%;
+        }
+
+        .note {
+            background: #fff7ed;
+            border-left: 6px solid #f97316;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 8px;
+            color: #92400e;
+            font-weight: 500;
+        }
+
+        .links a {
+            display: inline-block;
+            margin: 8px 10px 0 0;
+            padding: 10px 14px;
+            background: #2563eb;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.3s;
+            font-weight: 600;
+        }
+
+            .links a:hover {
+                background: #1e40af;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Gestión Mascotas</h1>
+        <p>Gestión completa de mascotas y sus dueños registrados</p>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Descripción</h2>
+            <p>En esta ventana podrás visualizar todos los clientes registrados en la aplicación. Además, dispones de varias funciones clave para mantener la información actualizada:</p>
+            <ul>
+                <li><strong>🔍 Buscar:</strong> localizar clientes rápidamente introduciendo el nombre del dueño.</li>
+                <li><strong>✏️ Modificar:</strong> actualizar datos de las mascotas o de sus dueños.</li>
+                <li><strong>🗑️ Eliminar:</strong> borrar registros que ya no sean necesarios.</li>
+            </ul>
+            <div class="note">
+                ⚠️ Importante: si intentas modificar o eliminar un cliente sin seleccionarlo previamente, el sistema mostrará un error.
+                También recuerda que todos los campos deben estar completos para evitar fallos al guardar.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Vista previa de la ventana</h2>
+            <img src="Imagen/verdatos.png" alt="Formulario Guardar Cliente" />
+            <p>La interfaz es sencilla y clara: en la parte superior encontrarás el buscador, y debajo la lista de clientes con opciones de edición y eliminación.</p>
+        </div>
+
+        <div class="card links">
+            <h2>Accesos rápidos</h2>
+            <a href="principal.html">🏠 Volver al menú principal</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<map version="1.0">
+	<mapID target="aplicacion" url="html/general.html"/>	
+	<mapID target="login" url="html/login.html"/>
+	<mapID target="registro" url="html/registro.html"/>
+	<mapID target="ventana_principal" url="html/principal.html"/>
+	<mapID target="ventana_guardar" url="html/guardar.html"/>
+	<mapID target="ver_datos" url="html/verdatos.html"/>
+	<mapID target="usuarios" url="html/usuarios.html"/>
+	<mapID target="instalacion" url="html/instalacion.html"/>
+	<mapID target="preguntas" url="html/preguntas.html"/>
+</map>

@@ -1,0 +1,12 @@
+<index version="1.0">
+	
+	<indexitem text="Aplicación" target="aplicacion"/>
+	<indexitem text="Login" target="login"/>
+	<indexitem text="Registro" target="registro"/>
+	<indexitem text="Ventana principal" target="ventana_principal"/>
+	<indexitem text="Ventana guardar" target="ventana_guardar"/>
+	<indexitem text="Ver Datos" target="ver_datos"/>
+	<indexitem text="Usuarios" target="usuarios"/>	
+	<indexitem text="Preguntas" target="preguntas"/>
+	<indexitem text="Instalación" target="instalacion"/>
+</index>

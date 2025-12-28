@@ -1,0 +1,15 @@
+<toc version="1.0">
+	
+	<tocitem text="Aplicación" target="aplicacion">
+		<tocitem text="Login" target="login"/>
+		<tocitem text="Registro" target="registro"/>
+	</tocitem>
+	<tocitem text="Ventana principal" target="ventana_principal">
+		<tocitem text="Ventana guardar" target="ventana_guardar"/>
+		<tocitem text="Ver Datos" target="ver_datos"/>
+		<tocitem text="Usuarios" target="usuarios"/>
+	</tocitem>
+	<tocitem text="Instalación" target="instalacion"/>
+	<tocitem text="Preguntas" target="preguntas"/>
+
+</toc>

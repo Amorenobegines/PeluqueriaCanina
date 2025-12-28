@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Ayuda General</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f6f9;
+			margin: 0;
+			padding: 0;
+			color: #333;
+		}
+
+		header {
+			background: linear-gradient(90deg, #2563eb, #1e40af);
+			color: white;
+			padding: 20px;
+			text-align: center;
+		}
+
+			header h1 {
+				margin: 0;
+				font-size: 2em;
+			}
+
+		.container {
+			max-width: 900px;
+			margin: 30px auto;
+			padding: 20px;
+		}
+
+		h2, h3 {
+			color: #2563eb;
+			border-bottom: 2px solid #e5e7eb;
+			padding-bottom: 5px;
+		}
+
+		p {
+			line-height: 1.6;
+		}
+
+		ul {
+			list-style: none;
+			padding: 0;
+		}
+
+			ul li::before {
+				content: "✔️ ";
+				color: #10b981;
+			}
+
+		.card {
+			background: white;
+			border-radius: 10px;
+			box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+			padding: 20px;
+			margin-bottom: 20px;
+		}
+
+		.links a {
+			display: inline-block;
+			margin: 5px 0;
+			padding: 8px 12px;
+			background: #2563eb;
+			color: white;
+			border-radius: 6px;
+			text-decoration: none;
+			transition: background 0.3s;
+		}
+
+			.links a:hover {
+				background: #1e40af;
+			}
+
+		img {
+			border: 2px solid #e5e7eb;
+			border-radius: 8px;
+			margin: 10px 0;
+		}
+
+		footer {
+			text-align: center;
+			padding: 15px;
+			background: #e5e7eb;
+			margin-top: 30px;
+			font-size: 0.9em;
+			color: #555;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Ayuda General</h1>
+		<p>Aplicación de escritorio para gestionar clientes de peluquería canina con roles de usuario</p>
+	</header>
+
+	<div class="container">
+		<div class="card">
+			<h2>Funciones principales</h2>
+			<p>La aplicación permite:</p>
+			<ul>
+				<li>Registrar, modificar y eliminar información de mascotas y sus dueños.</li>
+				<li>Controlar el acceso según el rol del usuario (Administrador, Recepcionista o Trabajador).</li>
+			</ul>
+		</div>
+
+		<div class="card">
+			<h2>Ventanas principales</h2>
+			<p><strong>Ventana Login:</strong> permite iniciar sesión o registrarse para entrar en la aplicación.</p>
+			<p><strong>Ventana Principal:</strong> muestra el logo de la peluquería y cuatro botones:</p>
+			<ul>
+				<li><em>Guardar:</em> registrar un nuevo cliente (mascota) junto con los datos de su dueño.</li>
+				<li><em>Ver datos:</em> lista de clientes registrados, con opciones de ver, modificar o eliminar información.</li>
+				<li><em>Usuarios:</em> gestión de usuarios del sistema (solo rol administrador).</li>
+				<li><em>Salir:</em> cerrar sesión y volver a la ventana de inicio.</li>
+			</ul>
+		</div>
+
+		<div class="card links">
+			<h2>Accesos rápidos</h2>
+			<a href="login.html">Ventana Login</a>
+			<a href="registro.html">Ventana Registro</a>
+			<a href="principal.html">Ventana Principal</a>
+		</div>
+
+		<div class="card">
+			<h3>Ventana Login</h3>
+			<img src="Imagen/login.png" alt="Ventana Login" width="380" height="280" />
+
+			<h3>Ventana Registro</h3>
+			<img src="Imagen/registro.png" alt="Ventana Registro" width="380" height="280" />
+
+			<h3>Ventana Principal</h3>
+			<img src="Imagen/Principal.png" alt="Ventana Principal" width="380" height="280" />
+		</div>
+
+		<div class="card">
+			<h2>Ayuda Técnica</h2>
+			<ul>
+				<li><a href="instalacion.html">Cómo instalar la app</a></li>
+				<li><a href="preguntas.html">Preguntas frecuentes</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<footer>
+		© 2025 Peluquería Canina · Aplicación de escritorio
+	</footer>
+</body>
+</html>
