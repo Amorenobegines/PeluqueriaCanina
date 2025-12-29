@@ -62,7 +62,7 @@ README.md	                    Documento de instalación y uso
 
   Clona el repositorio:
   ```
-  git clone https://github.com/TU_USUARIO/PeluqueriaCanina.git
+  git clone [https://github.com/Amorenobegines/PeluqueriaCanina.git]
   ```
  
   Abrir el proyecto en NetBeans
