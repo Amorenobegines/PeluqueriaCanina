@@ -124,6 +124,7 @@ PeluqueriaCanina/
   Iconos personalizados.
 
 📄 Licencia
+
 Este proyecto se distribuye bajo la licencia MIT
 
 👩‍💻 Autora
