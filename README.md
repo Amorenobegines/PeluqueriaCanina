@@ -124,8 +124,8 @@ PeluqueriaCanina/
   Iconos personalizados.
 
 📄 Licencia
-Este proyecto se distribuye bajo la licencia que tú elijas (MIT, Apache, GPL…).
-Si no estás segura, te recomiendo MIT, que es simple y flexible.
+
+Este proyecto se distribuye bajo la licencia MIT
 
 👩‍💻 Autora
 Alicia Moreno  
