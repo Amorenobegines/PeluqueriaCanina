@@ -53,9 +53,13 @@ README.md	                    Documento de instalación y uso
 ⚙ Configuración de persistence.xml
 
 ```
-<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/peluqueriacanina?serverTimezone=UTC"/>
-<property name="javax.persistence.jdbc.user" value="root"/>
-<property name="javax.persistence.jdbc.password" value=""/>
+  <properties>
+       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/peluqueriacanina?serverTimezone=UTC"/>
+        <property name="javax.persistence.jdbc.user" value="root"/>
+        <property name="javax.persistence.jdbc.password" value="root"/>
+        <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="javax.persistence.schema-generation.database.action" value="update"/>
+    </properties>
 ```
 
 ▶ Ejecutar la aplicación
