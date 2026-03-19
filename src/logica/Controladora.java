@@ -3,7 +3,7 @@ package logica;
 import igu.VerUsuarios;
 import java.time.LocalDateTime;
 import java.util.List;
-import persistencia.ControladoraPersistencia;
+import Controlador.ControladoraPersistencia;
 
 /**
  * Clase encargada de coordinar la lógica de negocio del sistema de peluquería

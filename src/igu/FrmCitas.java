@@ -25,8 +25,8 @@ import logica.Controladora;
 import logica.FormUtils;
 import logica.Mascotas;
 import logica.Servicios;
-import persistencia.CitaJpaController;
-import persistencia.ControladoraPersistencia;
+import Controlador.CitaJpaController;
+import Controlador.ControladoraPersistencia;
 
 /**
  * Clase que representa la ventana principal de gestión de citas en la

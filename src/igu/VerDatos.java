@@ -10,7 +10,7 @@ import logica.Controladora;
 import logica.FormUtils;
 import logica.Mascotas;
 import logica.Servicios;
-import persistencia.MascotasJpaController;
+import Controlador.MascotasJpaController;
 
 /**
  * Ventana de visualización de datos en el sistema de gestión de peluquería

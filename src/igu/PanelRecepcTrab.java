@@ -10,7 +10,7 @@ import logica.Controladora;
 import logica.FormUtils;
 import logica.Mascotas;
 import logica.Servicios; 
-import persistencia.MascotasJpaController;
+import Controlador.MascotasJpaController;
 
 /**
  * Panel principal del perfil "Recepcionista" en el sistema de gestión de
