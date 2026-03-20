@@ -6,7 +6,8 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;;
+import javax.swing.table.DefaultTableModel;
+;
 import utils.FormUtils;
 import utils.InputKey;
 import logica.Rol;
@@ -32,6 +33,8 @@ import logica.Usuarios;
  * la aplicación y prepara las instancias necesarias para la interacción con la
  * capa lógica.</p>
  */
+
+
 public class VerUsuarios extends javax.swing.JFrame {
 
     /**
@@ -352,6 +355,23 @@ public class VerUsuarios extends javax.swing.JFrame {
         InputKey.soloLetras(evt);
         InputKey.limitar(evt, txtApellidos, 20);
     }//GEN-LAST:event_txtApellidosKeyPressed
+
+    /**
+     * Carga en los campos del formulario los datos del usuario seleccionado en
+     * la tabla de usuarios.
+     * <p>
+     * Este método se ejecuta cuando el usuario hace clic en una fila de
+     * {@code tablaUsuarios}. Si no hay ninguna fila seleccionada, se muestra un
+     * mensaje de advertencia y el método finaliza sin realizar cambios.
+     * </p>
+     *
+     * <p>
+     * Cuando una fila es válida, se obtienen los valores de cada columna
+     * (nombre, apellidos, email y rol) y se asignan a los componentes
+     * correspondientes del formulario, permitiendo visualizar o editar los
+     * datos del usuario seleccionado.
+     * </p>
+     */
     private void tablaUsuariosClicked() {  //Al seleccionar en la tabla una fila se nos escriba en el campo de texto.
 
         int fila = tablaUsuarios.getSelectedRow();
@@ -366,6 +386,22 @@ public class VerUsuarios extends javax.swing.JFrame {
         comboTipo.setSelectedItem(tablaUsuarios.getValueAt(fila, 4).toString());
     }
 
+    /**
+     * Carga en la tabla de usuarios todos los registros almacenados en la base
+     * de datos.
+     * <p>
+     * El método crea un {@code DefaultTableModel} no editable con las columnas
+     * necesarias (ID, nombre, apellidos, email y rol). A continuación, obtiene
+     * la lista completa de usuarios desde el controlador
+     * {@code controlUsuarios} y agrega cada uno como una fila en la tabla.
+     * </p>
+     *
+     * <p>
+     * Si un usuario no tiene un rol asignado, se muestra el texto
+     * {@code "Sin rol"} en la columna correspondiente. Finalmente, el modelo
+     * generado se asigna a {@code tablaUsuarios}, actualizando su contenido.
+     * </p>
+     */
     public void cargarTablaUsuarios() {
         DefaultTableModel modelo = new DefaultTableModel(
                 new String[]{"Id", "Nombre", "Apellidos", "Email", "Rol"}, 0

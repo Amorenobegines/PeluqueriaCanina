@@ -46,7 +46,6 @@ public class ModificarDatos extends javax.swing.JFrame {
      * se establece en false.
      */
     boolean vacio = false;
-     
 
     /**
      * Constructor que inicializa la ventana de modificación de datos.
@@ -345,7 +344,7 @@ public class ModificarDatos extends javax.swing.JFrame {
         if (resultado == JOptionPane.YES_OPTION) {
             FormUtils.cambiarVentana(this, new VerDatos(rolActual));
         }
-    
+
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -442,7 +441,7 @@ public class ModificarDatos extends javax.swing.JFrame {
      * pantalla {@code VerDatos}, cerrando la ventana actual.
      */
     private void guardarDatos() {
-       String nombreMasco = txtNombre.getText().trim();
+        String nombreMasco = txtNombre.getText().trim();
         String raza = txtRaza.getText().trim();
         String color = txtColor.getText().trim();
         String observaciones = txtObservaciones.getText().trim();
@@ -477,7 +476,7 @@ public class ModificarDatos extends javax.swing.JFrame {
      * @param num_cliente Número de cliente que identifica a la mascota.
      */
     private void cargarDatos(int num_cliente) {
-       this.masco = controlMascotas.traerMascota(num_cliente);
+        this.masco = controlMascotas.traerMascota(num_cliente);
 
         txtNombre.setText(masco.getNombreMas());
         txtColor.setText(masco.getColor());

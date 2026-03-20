@@ -5,8 +5,32 @@ import logica.Rol;
 import persistencia.RolJpaController;
 
 /**
+ * Controlador encargado de gestionar todas las operaciones relacionadas con los
+ * roles dentro del sistema.
+ * <p>
+ * Esta clase forma parte de la capa de lógica del patrón MVC y actúa como
+ * intermediaria entre la interfaz gráfica y la capa de persistencia. Su
+ * responsabilidad principal es ofrecer métodos de alto nivel para realizar
+ * operaciones CRUD sobre la entidad {@code Rol}, delegando el acceso a la base
+ * de datos en {@code RolJpaController}.
+ * </p>
  *
- * @author Alicia
+ * <p>
+ * Entre las funcionalidades que proporciona se incluyen:
+ * </p>
+ * <ul>
+ * <li>Crear nuevos roles.</li>
+ * <li>Listar todos los roles registrados.</li>
+ * <li>Buscar roles por ID o por nombre.</li>
+ * <li>Modificar roles existentes.</li>
+ * <li>Eliminar roles de la base de datos.</li>
+ * </ul>
+ *
+ * <p>
+ * Además, esta clase incorpora validaciones básicas para evitar duplicados y
+ * garantizar la integridad de los datos antes de realizar operaciones
+ * persistentes.
+ * </p>
  */
 public class ControlRoles {
 

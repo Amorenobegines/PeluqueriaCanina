@@ -253,7 +253,7 @@ public class VerDatos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnSalir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalir1ActionPerformed
-       FormUtils.salirSegunRol(rolActual, this);
+        FormUtils.salirSegunRol(rolActual, this);
     }//GEN-LAST:event_btnSalir1ActionPerformed
 
     private void verTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verTodoActionPerformed
@@ -272,7 +272,6 @@ public class VerDatos extends javax.swing.JFrame {
             btnEliminar.setEnabled(false);
         }
     }
-
 
     public void cargarTabla() {
         DefaultTableModel modelo = (DefaultTableModel) tablaMascota.getModel();
@@ -361,7 +360,6 @@ public class VerDatos extends javax.swing.JFrame {
 
     }
 
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;

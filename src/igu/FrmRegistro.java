@@ -263,29 +263,29 @@ public class FrmRegistro extends javax.swing.JFrame {
      * electrónico.
      *
      */
-   private void registrarUsuario() {
+    private void registrarUsuario() {
 
-    String nombre = txtNombre.getText().trim();
-    String apellidos = txtApellidos.getText().trim();
-    String email = txtEmail.getText().trim();
-    String pass = txtPassword.getText().trim();
-    String rolSeleccionado = comboTipo.getSelectedItem().toString();
+        String nombre = txtNombre.getText().trim();
+        String apellidos = txtApellidos.getText().trim();
+        String email = txtEmail.getText().trim();
+        String pass = txtPassword.getText().trim();
+        String rolSeleccionado = comboTipo.getSelectedItem().toString();
 
-    try {
-        // Delegar toda la lógica al controlador
-        controlUsuario.registrarUsuario(nombre, apellidos, email, pass, rolSeleccionado);
+        try {
+            // Delegar toda la lógica al controlador
+            controlUsuario.registrarUsuario(nombre, apellidos, email, pass, rolSeleccionado);
 
-        // Mostrar mensaje de éxito
-        FormUtils.mostrarMensaje("Usuario registrado correctamente", "Info", "Registro");
+            // Mostrar mensaje de éxito
+            FormUtils.mostrarMensaje("Usuario registrado correctamente", "Info", "Registro");
 
-        // Limpiar formulario
-        FormUtils.limpiarFormulario(rootPane);
+            // Limpiar formulario
+            FormUtils.limpiarFormulario(rootPane);
 
-    } catch (Exception ex) {
-        // Mostrar mensaje de error
-        FormUtils.mostrarMensaje(ex.getMessage(), "Error", "Registro");
+        } catch (Exception ex) {
+            // Mostrar mensaje de error
+            FormUtils.mostrarMensaje(ex.getMessage(), "Error", "Registro");
+        }
     }
-}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

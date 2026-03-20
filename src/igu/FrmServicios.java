@@ -12,8 +12,36 @@ import utils.FormUtils;
 import utils.InputKey;
 
 /**
+ * Ventana de gestión de servicios dentro del sistema de peluquería canina.
+ * <p>
+ * Esta clase forma parte de la capa de presentación del patrón MVC y permite al
+ * usuario realizar operaciones CRUD sobre los servicios disponibles: crear,
+ * listar, editar y eliminar servicios.
+ * </p>
  *
- * @author Alicia
+ * <p>
+ * El formulario interactúa con el controlador {@code ControlServicios} para
+ * delegar toda la lógica de negocio y persistencia, manteniendo la vista libre
+ * de operaciones de base de datos.
+ * </p>
+ *
+ * <p>
+ * Entre las funcionalidades principales del formulario se incluyen:
+ * </p>
+ * <ul>
+ * <li>Mostrar en una tabla todos los servicios registrados.</li>
+ * <li>Permitir la creación de nuevos servicios mediante campos de texto.</li>
+ * <li>Editar un servicio seleccionado en la tabla.</li>
+ * <li>Eliminar servicios existentes.</li>
+ * <li>Limpiar el formulario tras cada operación.</li>
+ * <li>Ocultar la columna ID para evitar su manipulación directa.</li>
+ * </ul>
+ *
+ * <p>
+ * La clase también se encarga de validar la selección de filas en la tabla,
+ * manejar excepciones de forma amigable para el usuario y actualizar la
+ * interfaz tras cada operación.
+ * </p>
  */
 public class FrmServicios extends javax.swing.JFrame {
 
@@ -285,8 +313,21 @@ public class FrmServicios extends javax.swing.JFrame {
         InputKey.soloNumeros(evt);
     }//GEN-LAST:event_txtPrecioKeyTyped
 
-     private void cargarTabla() {
-
+    /**
+     * Carga en la tabla todos los servicios registrados en la base de datos.
+     * <p>
+     * El método crea un {@code DefaultTableModel} no editable con las columnas
+     * necesarias (ID, Servicio y Precio). A continuación, obtiene la lista de
+     * servicios desde {@code controlServicios} y agrega cada uno como una fila.
+     * </p>
+     *
+     * <p>
+     * Finalmente, asigna el modelo a {@code tablaServicios} y oculta la columna
+     * del ID para evitar su edición o visualización directa por parte del
+     * usuario.
+     * </p>
+     */
+    private void cargarTabla() {
         modeloTabla = new DefaultTableModel(
                 new String[]{"ID", "Servicio", "Precio"}, 0) {
 
@@ -300,7 +341,7 @@ public class FrmServicios extends javax.swing.JFrame {
 
         for (Servicios s : lista) {
             modeloTabla.addRow(new Object[]{
-                s.getId_servicio(),     // ID en columna 0
+                s.getId_servicio(), // ID en columna 0
                 s.getTipoServicios(),
                 s.getPrecio()
             });
@@ -314,6 +355,21 @@ public class FrmServicios extends javax.swing.JFrame {
         tablaServicios.getColumnModel().getColumn(0).setWidth(0);
     }
 
+    /**
+     * Guarda un nuevo servicio utilizando los datos ingresados en el
+     * formulario.
+     * <p>
+     * El método obtiene el tipo de servicio y el precio desde los campos de
+     * texto, valida el precio convirtiéndolo a número y delega la creación del
+     * servicio al controlador {@code controlServicios}.
+     * </p>
+     *
+     * <p>
+     * Tras guardar el servicio, se recarga la tabla, se limpia el formulario y
+     * se muestra un mensaje de confirmación. Si ocurre algún error, se muestra
+     * un mensaje descriptivo al usuario.
+     * </p>
+     */
     private void guardarServicio() {
         try {
             String tipo = txtServicio.getText();
@@ -330,6 +386,25 @@ public class FrmServicios extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Edita el servicio seleccionado en la tabla utilizando los datos del
+     * formulario.
+     * <p>
+     * El método verifica que haya una fila seleccionada. Luego obtiene el ID
+     * del servicio desde la tabla y los nuevos valores desde los campos de
+     * texto.
+     * </p>
+     *
+     * <p>
+     * Los cambios se envían al controlador {@code controlServicios} para
+     * actualizar el registro en la base de datos. Finalmente, se recarga la
+     * tabla, se limpia el formulario y se muestra un mensaje de confirmación.
+     * </p>
+     *
+     * <p>
+     * Si ocurre un error durante la edición, se muestra un mensaje informativo.
+     * </p>
+     */
     private void editarServicios() {
         int fila = tablaServicios.getSelectedRow();
         if (fila == -1) {
@@ -353,6 +428,19 @@ public class FrmServicios extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Elimina el servicio seleccionado en la tabla.
+     * <p>
+     * El método verifica que el usuario haya seleccionado una fila. Si es así,
+     * obtiene el ID del servicio desde la tabla y solicita al controlador
+     * {@code controlServicios} que elimine el registro correspondiente.
+     * </p>
+     *
+     * <p>
+     * Después de eliminar el servicio, se recarga la tabla, se limpia el
+     * formulario y se muestra un mensaje de confirmación al usuario.
+     * </p>
+     */
     private void eliminarServicio() {
         int fila = tablaServicios.getSelectedRow();
         if (fila == -1) {

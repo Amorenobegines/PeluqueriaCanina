@@ -16,7 +16,7 @@ import javax.swing.table.TableColumnModel;
 import logica.Cita;
 import utils.FormUtils;
 import logica.Mascotas;
-import logica.Servicios; 
+import logica.Servicios;
 import controlador.ControlCitas;
 import controlador.ControlMascotas;
 import controlador.ControlServicios;
@@ -384,10 +384,25 @@ public class FrmCitas extends javax.swing.JFrame {
     private void tblCitasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCitasMouseClicked
         clickTablaCita();
     }//GEN-LAST:event_tblCitasMouseClicked
-/**
- * 
- * @throws Exception 
- */
+
+    /**
+     * Elimina la cita seleccionada en la tabla de citas.
+     * <p>
+     * Este método obtiene la fila actualmente seleccionada en {@code tblCitas}.
+     * Si no hay ninguna fila seleccionada, el método finaliza sin realizar
+     * ninguna acción. En caso contrario, extrae el ID de la cita desde la
+     * primera columna de la fila seleccionada y solicita al controlador
+     * {@code controlCitas} que elimine dicha cita de la base de datos.
+     * </p>
+     *
+     * <p>
+     * Tras eliminar la cita, se llama al método {@code cargarTabla()} para
+     * refrescar el contenido de la tabla y mostrar los datos actualizados.
+     * </p>
+     *
+     * @throws Exception si ocurre un error durante la eliminación de la cita en
+     * la capa de persistencia.
+     */
     private void eliminarCita() throws Exception {
         int fila = tblCitas.getSelectedRow();
         if (fila == -1) {
@@ -397,9 +412,31 @@ public class FrmCitas extends javax.swing.JFrame {
         int id = (int) tblCitas.getValueAt(fila, 0);
         controlCitas.eliminarCita(id);
         cargarTabla();
-       
+
     }
 
+    /**
+     * Busca y muestra en la tabla todas las citas correspondientes a una fecha
+     * introducida por el usuario.
+     * <p>
+     * El método solicita al usuario una fecha mediante un cuadro de diálogo en
+     * formato {@code yyyy-MM-dd}. Si no se introduce ninguna fecha, se recarga
+     * la tabla completa y el proceso finaliza.
+     * </p>
+     *
+     * <p>
+     * Si la fecha introducida es válida, se consulta al controlador
+     * {@code controlCitas} para obtener la lista de citas asociadas a dicha
+     * fecha. La tabla {@code tblCitas} se limpia y se rellenan sus filas con
+     * los datos obtenidos. Si no existen citas para ese día, se muestra un
+     * mensaje informativo.
+     * </p>
+     *
+     * <p>
+     * Si la fecha no cumple el formato esperado, se muestra un mensaje de error
+     * y se recarga la tabla completa.
+     * </p>
+     */
     private void buscarFecha() {
         String fechaStr = JOptionPane.showInputDialog(this, "Introduce la fecha (yyyy-MM-dd):");
 
@@ -487,9 +524,36 @@ public class FrmCitas extends javax.swing.JFrame {
         columnModel.getColumn(2).setPreferredWidth(100);
         columnModel.getColumn(3).setPreferredWidth(300);
         columnModel.getColumn(3).setMinWidth(200);
-         FormUtils.limpiarFormulario(this);
+        FormUtils.limpiarFormulario(this);
     }
 
+    /**
+     * Carga en el formulario los datos de la cita seleccionada en la tabla.
+     * <p>
+     * Este método se ejecuta cuando el usuario hace clic en una fila de
+     * {@code tblCitas}. Si no hay ninguna fila seleccionada, el método finaliza
+     * sin realizar cambios. En caso contrario, obtiene el ID de la cita desde
+     * la primera columna de la tabla y recupera el objeto {@code Cita} completo
+     * mediante el controlador {@code controlCitas}.
+     * </p>
+     *
+     * <p>
+     * Una vez obtenida la cita, se rellenan los campos del formulario:
+     * </p>
+     * <ul>
+     * <li>Se selecciona en {@code cmbMascota1} el nombre de la mascota
+     * asociada.</li>
+     * <li>Se convierte la fecha y hora de la cita a {@code java.util.Date} y se
+     * asigna al componente {@code jsFecha}.</li>
+     * <li>Se limpia la selección de {@code listaServicios} y se vuelven a
+     * marcar únicamente los servicios asociados a la cita.</li>
+     * </ul>
+     *
+     * <p>
+     * Este método permite que el usuario visualice y edite fácilmente los datos
+     * de una cita existente.
+     * </p>
+     */
     private void clickTablaCita() {
         int fila = tblCitas.getSelectedRow();
         if (fila == -1) {

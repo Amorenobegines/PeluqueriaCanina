@@ -9,7 +9,7 @@ package exceptions;
  */
 public class NonexistentEntityException extends Exception {
     
-    /**
+/**
      * Crea una nueva instancia de NonexistentEntityException con un mensaje
      * descriptivo y una causa encadenada.
      *
