@@ -1,15 +1,14 @@
 package igu;
 
+import controlador.ControlUsuarios;
 import java.awt.Image;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
-import logica.Controladora;
-import logica.FormUtils;
-import logica.InputKey;
+import javax.swing.table.DefaultTableModel;;
+import utils.FormUtils;
+import utils.InputKey;
 import logica.Rol;
 import logica.Usuarios;
 
@@ -17,35 +16,39 @@ import logica.Usuarios;
  * Ventana de visualización de usuarios en el sistema de gestión de peluquería
  * canina.
  *
- * <p>Esta clase extiende {@link javax.swing.JFrame} y permite consultar los
+ * <p>
+ * Esta clase extiende {@link javax.swing.JFrame} y permite consultar los
  * registros de usuarios almacenados en la base de datos. La ventana muestra
  * información relevante de los usuarios y facilita su gestión dentro del
  * sistema.</p>
  *
- * <p>Se apoya en la clase {@link Controladora} para acceder a la lógica de
+ * <p>
+ * Se apoya en la clase {@link Controladora} para acceder a la lógica de
  * negocio, realizar consultas y obtener los datos necesarios para la
  * visualización.</p>
  *
- * <p>Al inicializarse, configura los componentes gráficos, establece el ícono
- * de la aplicación y prepara las instancias necesarias para la interacción con
- * la capa lógica.</p>
+ * <p>
+ * Al inicializarse, configura los componentes gráficos, establece el ícono de
+ * la aplicación y prepara las instancias necesarias para la interacción con la
+ * capa lógica.</p>
  */
 public class VerUsuarios extends javax.swing.JFrame {
 
     /**
      * Instancia de la clase Controladora para acceder a la lógica de negocio.
      */
-    Controladora control = null;
+    ControlUsuarios controlUsuarios = null;
 
     /**
      * Constructor que inicializa la ventana de visualización de usuarios.
      *
-     * <p>Configura los componentes gráficos, establece el ícono de la ventana y
+     * <p>
+     * Configura los componentes gráficos, establece el ícono de la ventana y
      * crea la instancia de {@link Controladora} necesaria para obtener los
      * datos que serán mostrados.</p>
      */
     public VerUsuarios() {
-        control = new Controladora();
+        controlUsuarios = new ControlUsuarios();
         initComponents();
         Image icon = new ImageIcon("./icon/logo2.png").getImage();
         this.setIconImage(icon);
@@ -324,25 +327,7 @@ public class VerUsuarios extends javax.swing.JFrame {
      * @param evt Evento de clic del mouse sobre la tabla.
      */
     private void tablaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUsuariosMouseClicked
-        //Al seleccionar en la tabla una fila se nos escriba en el campo de texto.
-
-        int fila = tablaUsuarios.getSelectedRow();
-        if (fila == -1) {
-            FormUtils.mostrarMensaje("Usuario no seleccionado", "Error", "Seleccionar");
-        } else {
-            // int id = Integer.parseInt((String) tablaUsuarios.getValueAt(fila, 0).toString());
-            String nom = (String) tablaUsuarios.getValueAt(fila, 1);
-            String apellidos = (String) tablaUsuarios.getValueAt(fila, 2);
-            String email = (String) tablaUsuarios.getValueAt(fila, 3);
-            String tipo = (String) tablaUsuarios.getValueAt(fila, 4);
-
-            txtNombre.setText(nom);
-            txtApellidos.setText(apellidos);
-            txtemail.setText(email);
-
-            comboTipo.setSelectedItem(tipo);
-
-        }
+        tablaUsuariosClicked();
     }//GEN-LAST:event_tablaUsuariosMouseClicked
 
     private void btnModifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifActionPerformed
@@ -367,55 +352,41 @@ public class VerUsuarios extends javax.swing.JFrame {
         InputKey.soloLetras(evt);
         InputKey.limitar(evt, txtApellidos, 20);
     }//GEN-LAST:event_txtApellidosKeyPressed
+    private void tablaUsuariosClicked() {  //Al seleccionar en la tabla una fila se nos escriba en el campo de texto.
 
-    /**
-     * Carga y muestra los usuarios registrados en la tabla de la interfaz.
-     * <p>
-     * Este método obtiene la lista de usuarios desde la capa de control, crea
-     * un modelo de tabla no editable, asigna los títulos de las columnas y
-     * llena la tabla con los datos de cada usuario.
-     * <p>
-     * Además, ajusta el ancho de algunas columnas para una mejor visualización:
-     * <ul>
-     * <li>Columna Id: ancho pequeño</li>
-     * <li>Columna Nombre: ancho medio</li>
-     * </ul>
-     */
+        int fila = tablaUsuarios.getSelectedRow();
+        if (fila == -1) {
+            FormUtils.mostrarMensaje("Usuario no seleccionado", "Error", "Seleccionar");
+            return;
+        }
+
+        txtNombre.setText(tablaUsuarios.getValueAt(fila, 1).toString());
+        txtApellidos.setText(tablaUsuarios.getValueAt(fila, 2).toString());
+        txtemail.setText(tablaUsuarios.getValueAt(fila, 3).toString());
+        comboTipo.setSelectedItem(tablaUsuarios.getValueAt(fila, 4).toString());
+    }
+
     public void cargarTablaUsuarios() {
-        DefaultTableModel modeloTabla = new DefaultTableModel() {
+        DefaultTableModel modelo = new DefaultTableModel(
+                new String[]{"Id", "Nombre", "Apellidos", "Email", "Rol"}, 0
+        ) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
 
-        String titulos[] = {"Id", "Nombre", "Apellidos", "Email", "Rol"};
-        modeloTabla.setColumnIdentifiers(titulos);
-
-        List<Usuarios> listaUsuarios = control.traerUsuarios();
-
-        if (listaUsuarios != null) {
-            for (Usuarios u : listaUsuarios) {
-                Object[] fila = {
-                    u.getId(),
-                    u.getNombre(),
-                    u.getApellidos(),
-                    u.getEmail(),
-                    (u.getTipo_rol() != null ? u.getTipo_rol().getNombre() : "Sin rol")
-                };
-                modeloTabla.addRow(fila);
-            }
-            tablaUsuarios.setModel(modeloTabla);
-
-            TableColumnModel columnModel = tablaUsuarios.getColumnModel();
-
-            columnModel.getColumn(0).setPreferredWidth(30);
-            columnModel.getColumn(0).setMinWidth(30);
-            columnModel.getColumn(0).setMaxWidth(30);
-
-            columnModel.getColumn(1).setPreferredWidth(50);
-
+        for (Usuarios u : controlUsuarios.traerUsuarios()) {
+            modelo.addRow(new Object[]{
+                u.getId(),
+                u.getNombre(),
+                u.getApellidos(),
+                u.getEmail(),
+                (u.getTipo_rol() != null ? u.getTipo_rol().getNombre() : "Sin rol")
+            });
         }
+
+        tablaUsuarios.setModel(modelo);
     }
 
     /**
@@ -432,71 +403,39 @@ public class VerUsuarios extends javax.swing.JFrame {
      */
     private void modificar() {
         int fila = tablaUsuarios.getSelectedRow();
-        if (fila != -1) {
-            int idUsuario = (int) tablaUsuarios.getValueAt(fila, 0);
-            Usuarios usuario = control.traerUsuario(idUsuario);
-
-            String nuevoNombre = txtNombre.getText().trim();
-            String nuevoApellidos = txtApellidos.getText().trim();
-            String nuevoEmail = txtemail.getText().trim();
-
-            // Validar que no haya campos vacíos
-            if (nuevoNombre.isEmpty() || nuevoApellidos.isEmpty() || nuevoEmail.isEmpty()) {
-                FormUtils.mostrarMensaje("Debe completar todos los campos.", "Error", "Completar campos.");
-                return;
-            }
-
-            // Validar formato de email
-            String patronEmail = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
-            if (!nuevoEmail.matches(patronEmail)) {
-                FormUtils.mostrarMensaje("El correo electrónico no tiene un formato válido.", "Error", "Error al guardar");
-
-                return;
-            }
-
-            // Validar que el email no esté duplicado en otro usuario
-            boolean existeEmail = false;
-            for (Usuarios u : control.traerUsuarios()) {
-                if (u.getEmail().equalsIgnoreCase(nuevoEmail) && u.getId() != idUsuario) {
-                    existeEmail = true;
-                    break;
-                }
-            }
-
-            if (existeEmail) {
-                FormUtils.mostrarMensaje("El correo " + nuevoEmail + " ya está registrado en otro usuario.", "Error", "Correo registrado.");
-                FormUtils.limpiarFormulario(rootPane);
-                return;
-            }
-
-            //  Actualizar con los valores de los campos
-            usuario.setNombre(nuevoNombre);
-            usuario.setApellidos(nuevoApellidos);
-            usuario.setEmail(nuevoEmail);
-
-            //  Buscar rol en BD
-            Rol rol = null;
-            for (Rol r : control.traerRoles()) {
-                if (r.getNombre().equalsIgnoreCase(comboTipo.getSelectedItem().toString())) {
-                    rol = r;
-                    break;
-                }
-            }
-            if (rol != null) {
-                usuario.setTipo_rol(rol);
-            }
-
-            //  Guardar cambios
-            try {
-                control.modificarUsuario(usuario);
-                cargarTablaUsuarios();
-                FormUtils.mostrarMensaje("Usuario modificado correctamente.", "Info", "Usuario modificado");
-
-            } catch (Exception ex) {
-                FormUtils.mostrarMensaje("Error al modificar el usuario: " + ex.getMessage(), "Error", "Error");
-            }
-        } else {
+        if (fila == -1) {
             FormUtils.mostrarMensaje("Selecciona un usuario para modificar.", "Error", "Usuario");
+            return;
+        }
+
+        int id = (int) tablaUsuarios.getValueAt(fila, 0);
+        String nombre = txtNombre.getText().trim();
+        String apellidos = txtApellidos.getText().trim();
+        String email = txtemail.getText().trim();
+        String rol = comboTipo.getSelectedItem().toString();
+
+        if (nombre.isEmpty() || apellidos.isEmpty() || email.isEmpty()) {
+            FormUtils.mostrarMensaje("Debe completar todos los campos.", "Error", "Campos vacíos");
+            return;
+        }
+
+        if (!controlUsuarios.emailValido(email)) {
+            FormUtils.mostrarMensaje("Formato de email inválido.", "Error", "Email");
+            return;
+        }
+
+        if (controlUsuarios.emailDuplicado(email, id)) {
+            FormUtils.mostrarMensaje("El email ya está registrado.", "Error", "Duplicado");
+            return;
+        }
+
+        try {
+            controlUsuarios.modificarUsuario(id, nombre, apellidos, email, rol);
+            cargarTablaUsuarios();
+            FormUtils.mostrarMensaje("Usuario modificado correctamente.", "Info", "Modificado");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            FormUtils.mostrarMensaje("Error al modificar: " + e.getMessage(), "Error", "Error");
         }
     }
 
@@ -514,41 +453,35 @@ public class VerUsuarios extends javax.swing.JFrame {
      *
      */
     private void buscarPorRol() {
-        // Obtener lista de roles desde la BD
-        List<Rol> roles = control.traerRoles();
+        List<Rol> roles = controlUsuarios.traerRoles();
 
-        if (roles == null || roles.isEmpty()) {
-            FormUtils.mostrarMensaje("No hay roles disponibles en la base de datos.", "Error", "Rol");
+        JComboBox<String> combo = new JComboBox<>();
+        for (Rol r : roles) {
+            combo.addItem(r.getNombre());
+        }
+
+        int opcion = JOptionPane.showConfirmDialog(this, combo, "Selecciona un rol",
+                JOptionPane.OK_CANCEL_OPTION);
+
+        if (opcion != JOptionPane.OK_OPTION) {
             return;
         }
 
-        // Crear un JComboBox con los nombres de los roles
-        JComboBox<String> comboRoles = new JComboBox<>();
-        for (Rol r : roles) {
-            comboRoles.addItem(r.getNombre());
-        }
+        String rolSeleccionado = combo.getSelectedItem().toString();
 
-        // Mostrar el combo en un JOptionPane
-        int opcion = JOptionPane.showConfirmDialog(this, comboRoles,
-                "Selecciona un rol", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        List<Usuarios> filtrados = controlUsuarios.buscarPorRol(rolSeleccionado);
 
-        if (opcion == JOptionPane.OK_OPTION) {
-            String rolSeleccionado = (String) comboRoles.getSelectedItem();
+        DefaultTableModel modelo = (DefaultTableModel) tablaUsuarios.getModel();
+        modelo.setRowCount(0);
 
-            DefaultTableModel modelo = (DefaultTableModel) tablaUsuarios.getModel();
-            modelo.setRowCount(0);
-
-            for (Usuarios u : control.traerUsuarios()) {
-                if (u.getTipo_rol() != null && u.getTipo_rol().getNombre().equalsIgnoreCase(rolSeleccionado)) {
-                    modelo.addRow(new Object[]{
-                        u.getId(),
-                        u.getNombre(),
-                        u.getApellidos(),
-                        u.getEmail(),
-                        u.getTipo_rol().getNombre()
-                    });
-                }
-            }
+        for (Usuarios u : filtrados) {
+            modelo.addRow(new Object[]{
+                u.getId(),
+                u.getNombre(),
+                u.getApellidos(),
+                u.getEmail(),
+                u.getTipo_rol().getNombre()
+            });
         }
     }
 
@@ -566,14 +499,15 @@ public class VerUsuarios extends javax.swing.JFrame {
      */
     private void eliminarUsuario() {
         int fila = tablaUsuarios.getSelectedRow();
-        if (fila != -1) {
-            int idUsuario = (int) tablaUsuarios.getValueAt(fila, 0);
-            control.borrarUsuario(idUsuario);
-            cargarTablaUsuarios();
-            FormUtils.mostrarMensaje("Usuario eliminado correctamente.", "Info", "Eliminación correcta");
-        } else {
-            FormUtils.mostrarMensaje("Selecciona un usuario para eliminar.", "Error", "Eliminación ");
+        if (fila == -1) {
+            FormUtils.mostrarMensaje("Selecciona un usuario para eliminar.", "Error", "Usuario");
+            return;
         }
+        int id = (int) tablaUsuarios.getValueAt(fila, 0);
+        controlUsuarios.eliminarUsuario(id);
+        cargarTablaUsuarios();
+        FormUtils.limpiarFormulario(this);
+        FormUtils.mostrarMensaje("Usuario eliminado correctamente.", "Info", "Eliminado");
     }
 
 

@@ -3,12 +3,27 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/logica/Rol.java</file>
-            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/META-INF/persistence.xml</file>
-            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/persistencia/CitaJpaController.java</file>
-            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/logica/Duenio.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/controlador/ControlRoles.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/igu/VerDatos.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/igu/ModificarDatos.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/igu/Principal.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/controlador/ControlMascotas.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/igu/FrmServicios.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/igu/FrmCitas.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/igu/FrmLogin.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/controlador/ControlServicios.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/utils/FormUtils.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/igu/FrmRegistro.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/igu/InicioRecepc.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/controlador/ControlDuenio.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/controlador/ControlUsuarios.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/controlador/Controladora.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/persistencia/MascotasJpaController.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/persistencia/ServiciosJpaController.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/igu/VerUsuarios.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/persistencia/RolJpaController.java</file>
+            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/controlador/ControladoraPersistencia.java</file>
             <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/peluqueriacanina/PeluqueriaCanina.java</file>
-            <file>file:/C:/Users/Alicia/Documents/NetBeansProjects/PeluqueriaCanina/src/persistencia/UsuariosJpaController.java</file>
         </group>
     </open-files>
 </project-private>

@@ -1,17 +1,11 @@
 package igu;
 
-import java.awt.Font;
+import controlador.ControlMascotas;
 import java.awt.Image;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import logica.Controladora;
-import logica.FormUtils;
-import logica.InputKey;
-import logica.Mascotas;
+import utils.FormUtils;
+import utils.InputKey;
 import logica.Servicios;
 
 /**
@@ -30,11 +24,7 @@ import logica.Servicios;
  */
 public class CargarDatos extends javax.swing.JFrame {
 
-    /**
-     * Instancia de la clase Controladora para gestionar operaciones de negocio.
-     */
-    Controladora control = new Controladora();
-
+    ControlMascotas controlMascota = null;
     /**
      * Almacena el rol actual del usuario logueado en el sistema.
      * <p>
@@ -56,6 +46,7 @@ public class CargarDatos extends javax.swing.JFrame {
      */
     public CargarDatos(String rol) {
         initComponents();
+        controlMascota = new ControlMascotas();
         Image icon = new ImageIcon("./icon/logo2.png").getImage();
         this.setIconImage(icon);
         this.rolActual = rol;
@@ -86,10 +77,6 @@ public class CargarDatos extends javax.swing.JFrame {
         txtObservaciones = new javax.swing.JTextArea();
         cmbAlergico = new javax.swing.JComboBox<>();
         cmbAEspecial = new javax.swing.JComboBox<>();
-        jLabel11 = new javax.swing.JLabel();
-        jBoxBanio = new javax.swing.JCheckBox();
-        jBoxCorte = new javax.swing.JCheckBox();
-        jBoxUnias = new javax.swing.JCheckBox();
         btnLimpiar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
@@ -171,21 +158,6 @@ public class CargarDatos extends javax.swing.JFrame {
 
         cmbAEspecial.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-", "Si", "No" }));
 
-        jLabel11.setText("Servicios:");
-        jLabel11.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-
-        jBoxBanio.setBackground(new java.awt.Color(204, 204, 255));
-        jBoxBanio.setText("Baño");
-        jBoxBanio.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-
-        jBoxCorte.setBackground(new java.awt.Color(204, 204, 255));
-        jBoxCorte.setText("Corte");
-        jBoxCorte.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-
-        jBoxUnias.setBackground(new java.awt.Color(204, 204, 255));
-        jBoxUnias.setText("Uñas");
-        jBoxUnias.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -200,8 +172,7 @@ public class CargarDatos extends javax.swing.JFrame {
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,12 +181,6 @@ public class CargarDatos extends javax.swing.JFrame {
                     .addComponent(cmbAEspecial, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtRaza, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtColor, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jBoxBanio, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jBoxCorte, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBoxUnias, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtTelefono, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNomDuenio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28))
@@ -244,16 +209,10 @@ public class CargarDatos extends javax.swing.JFrame {
                     .addComponent(jLabel7)
                     .addComponent(cmbAEspecial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jBoxBanio)
-                    .addComponent(jBoxCorte)
-                    .addComponent(jBoxUnias))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
                     .addComponent(txtNomDuenio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -261,7 +220,7 @@ public class CargarDatos extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))
-                .addGap(14, 14, 14))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         btnLimpiar.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
@@ -324,12 +283,12 @@ public class CargarDatos extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(72, 72, 72)
-                        .addComponent(jLabel2)))
-                .addGap(26, 26, 26)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnLimpiar)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -476,7 +435,6 @@ public class CargarDatos extends javax.swing.JFrame {
      * tipear en el campo.
      */
     private void txtObservacionesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtObservacionesKeyTyped
-        //jtextField para el campo de observacion con solo 50 caracteres 
         InputKey.limitar(evt, txtRaza, 50);
     }//GEN-LAST:event_txtObservacionesKeyTyped
 
@@ -503,7 +461,7 @@ public class CargarDatos extends javax.swing.JFrame {
     }//GEN-LAST:event_txtColorKeyTyped
 
     private void cmbAlergicoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbAlergicoKeyTyped
-      
+
     }//GEN-LAST:event_cmbAlergicoKeyTyped
 
     /**
@@ -539,45 +497,20 @@ public class CargarDatos extends javax.swing.JFrame {
         String nombreDuenio = txtNomDuenio.getText().trim();
         String telefono = txtTelefono.getText().trim();
 
-        // Validar campos vacíos
         if (nombreMasco.isEmpty() || raza.isEmpty() || color.isEmpty() || observaciones.isEmpty()
                 || alergia == null || atenEsp == null || nombreDuenio.isEmpty() || telefono.isEmpty()) {
 
-            JLabel label = new JLabel("Por favor, completa todos los campos antes de guardar.");
-            label.setFont(new Font("Arial", Font.BOLD, 14));
-
-            JOptionPane optionPane = new JOptionPane(label, JOptionPane.WARNING_MESSAGE, JOptionPane.DEFAULT_OPTION);
-            JDialog dialog = optionPane.createDialog("Campos incompletos");
-            dialog.setAlwaysOnTop(true);
-            dialog.setVisible(true);
-            return; // Salir del método sin guardar
+            JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos.");
+            return;
         }
 
-        //  Recoger servicios seleccionados de los JCheckBox
-        List<Servicios> serviciosSeleccionados = new ArrayList<>();
-        if (jBoxBanio.isSelected()) {
-            serviciosSeleccionados.add(new Servicios("Baño", 15.00));
-        }
-        if (jBoxCorte.isSelected()) {
-            serviciosSeleccionados.add(new Servicios("Corte de pelo", 20.00));
-        }
-        if (jBoxUnias.isSelected()) {
-            serviciosSeleccionados.add(new Servicios("Corte de uñas", 10.00));
-        }
+        controlMascota.guardarMascota(
+                nombreMasco, raza, color, observaciones,
+                alergia, atenEsp, nombreDuenio, telefono
+        );
 
-        // Guardar si todo está completo
-        control.guardar(nombreMasco, raza, color, observaciones, alergia, atenEsp, nombreDuenio, telefono, serviciosSeleccionados);
-
-        JLabel label = new JLabel("Se guardó correctamente");
-        label.setFont(new Font("Arial", Font.BOLD, 14));
-
-        JOptionPane optionPane = new JOptionPane(label, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION);
-        JDialog dialog = optionPane.createDialog("Guardado");
-        dialog.setAlwaysOnTop(true);
-        dialog.setVisible(true);
-
+        JOptionPane.showMessageDialog(this, "Mascota guardada correctamente.");
         FormUtils.limpiarFormulario(rootPane);
-
     }
 
 
@@ -587,12 +520,8 @@ public class CargarDatos extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<String> cmbAEspecial;
     private javax.swing.JComboBox<String> cmbAlergico;
-    private javax.swing.JCheckBox jBoxBanio;
-    private javax.swing.JCheckBox jBoxCorte;
-    private javax.swing.JCheckBox jBoxUnias;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

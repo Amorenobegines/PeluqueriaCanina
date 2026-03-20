@@ -1,10 +1,9 @@
 package igu;
 
-import java.awt.Color;
-import java.awt.Image;
-import javax.swing.ImageIcon;
-import logica.Controladora;
-import logica.FormUtils;
+import controlador.ControlUsuarios;
+import java.awt.*;
+import javax.swing.*;
+import utils.FormUtils;
 import logica.Usuarios;
 
 /**
@@ -27,7 +26,7 @@ public class FrmLogin extends javax.swing.JFrame {
      */
     public static FrmRegistro fr;
 
-    Controladora control = null;
+    ControlUsuarios controlUsuario = null;
 
     /**
      * Constructor que inicializa la ventana de inicio de sesión.
@@ -37,7 +36,7 @@ public class FrmLogin extends javax.swing.JFrame {
      */
     public FrmLogin() {
         initComponents();
-        control = new Controladora();
+        controlUsuario = new ControlUsuarios();
         setLocationRelativeTo(null);
         Image icon = new ImageIcon("./icon/logo2.png").getImage();
         this.setIconImage(icon);
@@ -249,37 +248,20 @@ public class FrmLogin extends javax.swing.JFrame {
      * </p>
      */
     private void iniciarSesion() {
-        String email = txtUsuario.getText();
-        String pass = jtPass.getText();
+        String email = txtUsuario.getText().trim();
+        String pass = jtPass.getText().trim();
+        Usuarios usuario = controlUsuario.iniciarSesion(email, pass);
+        String rol = controlUsuario.iniciarSesionYObtenerRol(email, pass);
 
-        Usuarios usuario = control.iniciarSesion(email, pass);
+        if (rol != null) {
 
-        if (usuario != null) {
-            FormUtils.mostrarMensaje("Bienvenido " + usuario.getNombre() + " (" + usuario.getTipo_rol().getNombre() + ")", "Info", "Bienvenido");
-            // Abrir ventana según rol
-            String rol = usuario.getTipo_rol().getNombre().toUpperCase();
-            switch (rol) {
-                case "ADMINISTRADOR":
-                    dispose();
-                    Principal princ = new Principal();
-                    princ.setVisible(true);
-                    princ.setLocationRelativeTo(null);
-                    break;
-                case "RECEPCIONISTA":
-                    dispose();
-                    new InicioRecepc().setVisible(true);
-                    break;
-                case "TRABAJADOR":
-                    dispose();
-                    new PanelRecepcTrab("Trabajador").setVisible(true);
-                    break;
-                default:
-                    FormUtils.mostrarMensaje("Rol no reconocido.", "Error", "Error en el rol");
-            }
+            FormUtils.mostrarMensaje("Bienvenido " + usuario.getNombre() + " (" + rol + ")", "Info", "Login");
+            FormUtils.abrirVentanaSegunRol(rol, this);
         } else {
-            FormUtils.mostrarMensaje("Credenciales incorrectas. " + email + " Intenta de nuevo.", "Error", "Error al iniciar sesión");
+            FormUtils.mostrarMensaje("Credenciales incorrectas. Intenta de nuevo.", "Error", "Login");
         }
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciarSesion;

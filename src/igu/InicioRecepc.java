@@ -2,8 +2,7 @@ package igu;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-import logica.FormUtils;
+import utils.FormUtils;
 
 /**
  * Ventana principal del perfil "Recepcionista" en el sistema de gestión de
@@ -19,6 +18,11 @@ import logica.FormUtils;
  * @author Alicia
  */
 public class InicioRecepc extends javax.swing.JFrame {
+
+    /**
+     * Rol del usuario que abrió la ventana (Ej. "Recepcionista", "Trabajador").
+     */
+    private String rolActual;
 
     /**
      * Constructor que inicializa la interfaz gráfica del recepcionista.
@@ -64,6 +68,8 @@ public class InicioRecepc extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Zona Recepcionista");
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -121,14 +127,14 @@ public class InicioRecepc extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(btnCargar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
+                .addComponent(btnCargar)
+                .addGap(30, 30, 30)
                 .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
-                .addComponent(btnCita, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(30, 30, 30)
-                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addComponent(btnCita)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40))
         );
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -150,24 +156,27 @@ public class InicioRecepc extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55))
+                .addGap(49, 49, 49))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         jMenu1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\menu-removebg-preview.png")); // NOI18N
         jMenu1.setText("Menu");
 
-        jmCarga.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\guardar.png")); // NOI18N
+        jmCarga.setFont(new java.awt.Font("Segoe Print", 1, 14)); // NOI18N
         jmCarga.setText("Cargar Datos");
         jmCarga.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -176,7 +185,7 @@ public class InicioRecepc extends javax.swing.JFrame {
         });
         jMenu1.add(jmCarga);
 
-        jmVer.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\usuario.png")); // NOI18N
+        jmVer.setFont(new java.awt.Font("Segoe Print", 1, 14)); // NOI18N
         jmVer.setText("Ver Datos");
         jmVer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -185,7 +194,7 @@ public class InicioRecepc extends javax.swing.JFrame {
         });
         jMenu1.add(jmVer);
 
-        jmCitas.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\cita.png")); // NOI18N
+        jmCitas.setFont(new java.awt.Font("Segoe Print", 1, 14)); // NOI18N
         jmCitas.setText("Citas");
         jmCitas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -194,7 +203,7 @@ public class InicioRecepc extends javax.swing.JFrame {
         });
         jMenu1.add(jmCitas);
 
-        jmSalir.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\salir.png")); // NOI18N
+        jmSalir.setFont(new java.awt.Font("Segoe Print", 1, 14)); // NOI18N
         jmSalir.setText("Salir");
         jmSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -224,7 +233,9 @@ public class InicioRecepc extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -240,7 +251,7 @@ public class InicioRecepc extends javax.swing.JFrame {
      * @param evt Evento de acción generado por el botón.
      */
     private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
-       FormUtils.cambiarVentana(this, new PanelRecepcTrab("Recepcionista"));
+        FormUtils.cambiarVentana(this, new VerDatos("Recepcionista"));
     }//GEN-LAST:event_btnVerActionPerformed
 
     /**
@@ -253,14 +264,7 @@ public class InicioRecepc extends javax.swing.JFrame {
      * @param evt Evento de acción generado por el botón.
      */
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        //Botón Salir
-        int resultado = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de cerrar sesión?",
-                "Atención", JOptionPane.YES_OPTION);
-
-        if (resultado == JOptionPane.YES_OPTION) {
-            FormUtils.cambiarVentana(this, new FrmLogin());
-        }
+        FormUtils.salirSegunRol(rolActual, this);
     }//GEN-LAST:event_btnSalirActionPerformed
 
     /**
@@ -282,7 +286,7 @@ public class InicioRecepc extends javax.swing.JFrame {
      * @param evt
      */
     private void jmVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmVerActionPerformed
-        FormUtils.cambiarVentana(this, new PanelRecepcTrab("Recepcionista"));
+        FormUtils.cambiarVentana(this, new VerDatos(rolActual));
     }//GEN-LAST:event_jmVerActionPerformed
 
     /**

@@ -1,15 +1,12 @@
 package igu;
 
+import controlador.ControlMascotas;
 import java.awt.Image;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import logica.Controladora;
-import logica.FormUtils;
-import logica.InputKey;
+import utils.FormUtils;
+import utils.InputKey;
 import logica.Mascotas;
-import logica.Servicios;
 
 /**
  * Ventana de edición de datos de una mascota en el sistema de gestión de
@@ -30,9 +27,9 @@ import logica.Servicios;
 public class ModificarDatos extends javax.swing.JFrame {
 
     /**
-     * Controladora de lógica de negocio para acceder y modificar datos.
+     * Controladora de negocio para acceder y modificar datos.
      */
-    Controladora control = null;
+    ControlMascotas controlMascotas = null;
 
     /**
      * Mascota que se está editando.
@@ -43,12 +40,13 @@ public class ModificarDatos extends javax.swing.JFrame {
      * Número de cliente que identifica a la mascota.
      */
     int num_cliente;
-
+    private String rolActual;
     /**
      * Bandera de validación que indica si los campos están vacíos. Inicialmente
      * se establece en false.
      */
     boolean vacio = false;
+     
 
     /**
      * Constructor que inicializa la ventana de modificación de datos.
@@ -56,9 +54,11 @@ public class ModificarDatos extends javax.swing.JFrame {
      * @param num_cliente Número de cliente que identifica a la mascota a
      * modificar.
      */
-    public ModificarDatos(int num_cliente) {
-        control = new Controladora();
+    public ModificarDatos(int num_cliente, String rolActual) {
         initComponents();
+        this.num_cliente = num_cliente;
+        this.rolActual = rolActual;
+        this.controlMascotas = new ControlMascotas();
         Image icon = new ImageIcon("./icon/logo2.png").getImage();
         this.setIconImage(icon);
         cargarDatos(num_cliente);
@@ -91,10 +91,6 @@ public class ModificarDatos extends javax.swing.JFrame {
         txtObservaciones = new javax.swing.JTextArea();
         cmbAlergico = new javax.swing.JComboBox<>();
         cmbAEspecial = new javax.swing.JComboBox<>();
-        jLabel11 = new javax.swing.JLabel();
-        jBoxBanio = new javax.swing.JCheckBox();
-        jBoxCorte = new javax.swing.JCheckBox();
-        jBoxUnias = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Alican Administrador");
@@ -192,61 +188,42 @@ public class ModificarDatos extends javax.swing.JFrame {
 
         cmbAEspecial.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-", "Si", "No" }));
 
-        jLabel11.setText("Servicios:");
-
-        jBoxBanio.setText("Baño");
-
-        jBoxCorte.setText("Corte");
-
-        jBoxUnias.setText("Uñas");
-
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(46, 46, 46)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtNomDuenio)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane4)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBoxBanio, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBoxCorte, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBoxUnias, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(52, 52, 52))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(46, 46, 46)
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtNomDuenio)
-                                    .addGroup(jPanel5Layout.createSequentialGroup()
-                                        .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(jScrollPane4)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtRaza, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-                                        .addComponent(txtColor)
-                                        .addComponent(txtNombre))
-                                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(cmbAEspecial, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(cmbAlergico, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                        .addGap(15, 15, 15))))
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtRaza, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+                                .addComponent(txtColor)
+                                .addComponent(txtNombre))
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(cmbAEspecial, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cmbAlergico, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addGap(15, 15, 15))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -274,12 +251,6 @@ public class ModificarDatos extends javax.swing.JFrame {
                     .addComponent(cmbAEspecial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jBoxBanio)
-                    .addComponent(jBoxCorte)
-                    .addComponent(jBoxUnias))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel34)
                     .addComponent(txtNomDuenio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -290,7 +261,7 @@ public class ModificarDatos extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel33))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -325,12 +296,12 @@ public class ModificarDatos extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(77, 77, 77)
+                        .addGap(66, 66, 66)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -347,6 +318,7 @@ public class ModificarDatos extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -365,12 +337,15 @@ public class ModificarDatos extends javax.swing.JFrame {
      * @param evt el evento de acción generado al hacer clic en el botón "Salir"
      */
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        int resultado = JOptionPane.showConfirmDialog(this, "¿Está seguro de cerrar la ventana?"
-                + "\n Se perderán los datos introducidos", "Atención", JOptionPane.YES_OPTION);
-        //en caso que sea afirmativo, cerramos la ventana.
-        if (JOptionPane.YES_OPTION == resultado) {
-            FormUtils.cambiarVentana(this, new VerDatos());
+        int resultado = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de cerrar la ventana?\nSe perderán los datos introducidos",
+                "Atención",
+                JOptionPane.YES_NO_OPTION);
+
+        if (resultado == JOptionPane.YES_OPTION) {
+            FormUtils.cambiarVentana(this, new VerDatos(rolActual));
         }
+    
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -467,7 +442,7 @@ public class ModificarDatos extends javax.swing.JFrame {
      * pantalla {@code VerDatos}, cerrando la ventana actual.
      */
     private void guardarDatos() {
-        String nombreMasco = txtNombre.getText().trim();
+       String nombreMasco = txtNombre.getText().trim();
         String raza = txtRaza.getText().trim();
         String color = txtColor.getText().trim();
         String observaciones = txtObservaciones.getText().trim();
@@ -476,31 +451,43 @@ public class ModificarDatos extends javax.swing.JFrame {
         String nombreDuenio = txtNomDuenio.getText().trim();
         String telefono = txtTelefono.getText().trim();
 
-        // Validar campos vacíos
         if (nombreMasco.isEmpty() || raza.isEmpty() || color.isEmpty() || observaciones.isEmpty()
                 || alergia == null || atenEsp == null || nombreDuenio.isEmpty() || telefono.isEmpty()) {
+
             FormUtils.mostrarMensaje("Por favor, completa todos los campos antes de guardar.", "Error", "Campos incompletos");
-
-            //   mostarMensaje("Por favor, completa todos los campos antes de guardar.", "Error", "Campos incompletos");
-            return; // Salir del método sin guardar
+            return;
         }
 
-        //  Recoger servicios seleccionados de los JCheckBox
-        List<Servicios> serviciosSeleccionados = new ArrayList<>();
-        if (jBoxBanio.isSelected()) {
-            serviciosSeleccionados.add(new Servicios("Baño", 15.00));
-        }
-        if (jBoxCorte.isSelected()) {
-            serviciosSeleccionados.add(new Servicios("Corte de pelo", 20.00));
-        }
-        if (jBoxUnias.isSelected()) {
-            serviciosSeleccionados.add(new Servicios("Corte de uñas", 10.00));
-        }
+        controlMascotas.modificarMascota(masco, nombreMasco, raza, color, observaciones, alergia, atenEsp, nombreDuenio, telefono);
 
-        // Guardar si todo está completo
-        control.modificarMascota(masco, nombreMasco, raza, color, observaciones, alergia, atenEsp, nombreDuenio, telefono, serviciosSeleccionados);
-        FormUtils.mostrarMensaje("Modificación realizada correctamente", "Info", "Modificación correctamente");
-        FormUtils.cambiarVentana(this, new VerDatos());
+        FormUtils.mostrarMensaje("Modificación realizada correctamente", "Info", "Modificación");
+        FormUtils.cambiarVentana(this, new VerDatos(rolActual));
+    }
+
+    /**
+     * Carga los datos de una mascota específica en los campos del formulario.
+     *
+     * Este método obtiene la información de una mascota desde la base de datos
+     * utilizando su número de cliente. Luego, asigna los valores a los campos
+     * de texto y combos correspondientes en la interfaz gráfica.
+     *
+     * También ajusta las selecciones de los combos de alergia y atención
+     * especial según los valores "Si" o "No" almacenados en la mascota.
+     *
+     * @param num_cliente Número de cliente que identifica a la mascota.
+     */
+    private void cargarDatos(int num_cliente) {
+       this.masco = controlMascotas.traerMascota(num_cliente);
+
+        txtNombre.setText(masco.getNombreMas());
+        txtColor.setText(masco.getColor());
+        txtNomDuenio.setText(masco.getUnDuenio().getNombre());
+        txtRaza.setText(masco.getRaza());
+        txtTelefono.setText(masco.getUnDuenio().getTelefono());
+        txtObservaciones.setText(masco.getObservaciones());
+
+        cmbAlergico.setSelectedItem(masco.getAlergico());
+        cmbAEspecial.setSelectedItem(masco.getAtencion_especial());
 
     }
 
@@ -509,11 +496,7 @@ public class ModificarDatos extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<String> cmbAEspecial;
     private javax.swing.JComboBox<String> cmbAlergico;
-    private javax.swing.JCheckBox jBoxBanio;
-    private javax.swing.JCheckBox jBoxCorte;
-    private javax.swing.JCheckBox jBoxUnias;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
@@ -534,43 +517,4 @@ public class ModificarDatos extends javax.swing.JFrame {
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 
-    /**
-     * Carga los datos de una mascota específica en los campos del formulario.
-     *
-     * Este método obtiene la información de una mascota desde la base de datos
-     * utilizando su número de cliente. Luego, asigna los valores a los campos
-     * de texto y combos correspondientes en la interfaz gráfica.
-     *
-     * También ajusta las selecciones de los combos de alergia y atención
-     * especial según los valores "Si" o "No" almacenados en la mascota.
-     *
-     * @param num_cliente Número de cliente que identifica a la mascota.
-     */
-    private void cargarDatos(int num_cliente) {
-        this.masco = control.traerMascota(num_cliente);
-
-        txtNombre.setText(masco.getNombreMas());
-        txtColor.setText(masco.getColor());
-        txtNomDuenio.setText(masco.getUnDuenio().getNombre());
-        txtRaza.setText(masco.getRaza());
-        txtTelefono.setText(masco.getUnDuenio().getTelefono());
-        txtObservaciones.setText(masco.getObservaciones());
-
-        if (masco.getAlergico().equals("Si")) {
-            cmbAlergico.setSelectedIndex(1);
-        } else {
-            if (masco.getAlergico().equals("No")) {
-                cmbAlergico.setSelectedIndex(2);
-            }
-        }
-
-        if (masco.getAtencion_especial().equals("Si")) {
-            cmbAEspecial.setSelectedIndex(1);
-        } else {
-            if (masco.getAtencion_especial().equals("No")) {
-                cmbAEspecial.setSelectedIndex(2);
-            }
-        }
-
-    }
 }

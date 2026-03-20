@@ -2,8 +2,9 @@ package igu;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane; 
-import logica.FormUtils;
+import javax.swing.JOptionPane;
+import utils.FormUtils;
+
 /**
  * Ventana principal del perfil "Administrador" en el sistema de gestión de
  * peluquería canina.
@@ -21,6 +22,11 @@ import logica.FormUtils;
 public class Principal extends javax.swing.JFrame {
 
     /**
+     * Rol del usuario que abrió la ventana (Ej. "Recepcionista", "Trabajador").
+     */
+    private String rolActual;
+
+    /**
      * Constructor que inicializa la interfaz gráfica del administrador.
      *
      * Configura los componentes visuales, establece el ícono de la ventana y
@@ -32,7 +38,7 @@ public class Principal extends javax.swing.JFrame {
         this.setIconImage(icon);
         this.setLocationRelativeTo(null);
         FormUtils.habilitarAyuda(jmAyuda, getRootPane(), "aplicacion");
-   
+
     }
 
     @SuppressWarnings("unchecked")
@@ -47,13 +53,16 @@ public class Principal extends javax.swing.JFrame {
         btnCargar = new javax.swing.JButton();
         btnUseer = new javax.swing.JButton();
         btnCita = new javax.swing.JButton();
+        btnServicio = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu = new javax.swing.JMenu();
         jMCargarDatos = new javax.swing.JMenuItem();
         jMVerDatos = new javax.swing.JMenuItem();
+        jmServicios = new javax.swing.JMenuItem();
         jmCitas = new javax.swing.JMenuItem();
         jmUsuarios = new javax.swing.JMenuItem();
+        jmSalir = new javax.swing.JMenuItem();
         Ayuda = new javax.swing.JMenu();
         jmAyuda = new javax.swing.JMenuItem();
 
@@ -114,22 +123,33 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        btnServicio.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
+        btnServicio.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\editar.png")); // NOI18N
+        btnServicio.setText("Servicios");
+        btnServicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnServicioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnCita, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnUseer, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnCargar, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(btnCita, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                            .addGap(40, 40, 40)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(btnUseer, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnCargar, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(btnServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -139,9 +159,11 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(btnCargar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addComponent(btnCita, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(31, 31, 31)
+                .addGap(24, 24, 24)
+                .addComponent(btnServicio)
+                .addGap(18, 18, 18)
+                .addComponent(btnCita)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addComponent(btnUseer, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -169,15 +191,16 @@ public class Principal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addComponent(jLabel1)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(jLabel2))
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel2)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
 
         jMenuBar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -186,7 +209,7 @@ public class Principal extends javax.swing.JFrame {
         jMenu.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\menu-removebg-preview.png")); // NOI18N
         jMenu.setText("Menú");
 
-        jMCargarDatos.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\guardar.png")); // NOI18N
+        jMCargarDatos.setFont(new java.awt.Font("Segoe Print", 1, 14)); // NOI18N
         jMCargarDatos.setText("Cargar Datos");
         jMCargarDatos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -195,7 +218,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu.add(jMCargarDatos);
 
-        jMVerDatos.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\canino.png")); // NOI18N
+        jMVerDatos.setFont(new java.awt.Font("Segoe Print", 1, 14)); // NOI18N
         jMVerDatos.setText("Ver Datos");
         jMVerDatos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -204,7 +227,16 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu.add(jMVerDatos);
 
-        jmCitas.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\cita.png")); // NOI18N
+        jmServicios.setFont(new java.awt.Font("Segoe Print", 1, 14)); // NOI18N
+        jmServicios.setText("Servicios");
+        jmServicios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmServiciosActionPerformed(evt);
+            }
+        });
+        jMenu.add(jmServicios);
+
+        jmCitas.setFont(new java.awt.Font("Segoe Print", 1, 14)); // NOI18N
         jmCitas.setText("Citas");
         jmCitas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -213,7 +245,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu.add(jmCitas);
 
-        jmUsuarios.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\usuario.png")); // NOI18N
+        jmUsuarios.setFont(new java.awt.Font("Segoe Print", 1, 14)); // NOI18N
         jmUsuarios.setText("Usuarios");
         jmUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -221,6 +253,15 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jMenu.add(jmUsuarios);
+
+        jmSalir.setFont(new java.awt.Font("Segoe Print", 1, 14)); // NOI18N
+        jmSalir.setText("Salir");
+        jmSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmSalirActionPerformed(evt);
+            }
+        });
+        jMenu.add(jmSalir);
 
         jMenuBar1.add(jMenu);
 
@@ -250,79 +291,52 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        //Botón Salir
-        int resultado = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de cerrar sesión?",
-                "Atención", JOptionPane.YES_NO_OPTION);
-
-        if (resultado == JOptionPane.YES_OPTION) {
-            this.dispose();
-            FrmLogin frLogin = new FrmLogin();
-            frLogin.setVisible(true);
-        }
+        FormUtils.cambiarVentana(this, new FrmLogin());
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarActionPerformed
-        // al presionar el botón se cargará la pantalla de Cargar Datos.
-        CargarDatos pantalla = new CargarDatos("Administrador");
-        pantalla.setVisible(true);   // visible a true
-        pantalla.setLocationRelativeTo(null); // aparezca la pantalla en el centro 
-        this.dispose();
+        FormUtils.cambiarVentana(this, new CargarDatos("Administrador"));
     }//GEN-LAST:event_btnCargarActionPerformed
 
     private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
-        // al presionar el botón se cargará la pantalla de ver Datos.
-        VerDatos pantalla = new VerDatos();
-        pantalla.setVisible(true);   // visible a true
-        pantalla.setLocationRelativeTo(null); // aparezca la pantalla en el centro 
-        this.dispose();
+        FormUtils.cambiarVentana(this, new VerDatos("Administrador"));
     }//GEN-LAST:event_btnVerActionPerformed
 
     private void jMCargarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMCargarDatosActionPerformed
-        // al presionar el botón se cargará la pantalla de Cargar Datos.
-        this.dispose();
-        CargarDatos pantalla = new CargarDatos("Administrador");
-        pantalla.setVisible(true);   // visible a true
-        pantalla.setLocationRelativeTo(null); // aparezca la pantalla en el centro 
+        FormUtils.cambiarVentana(this, new CargarDatos("Administrador"));
     }//GEN-LAST:event_jMCargarDatosActionPerformed
 
     private void jMVerDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMVerDatosActionPerformed
-        // al presionar el botón se cargará la pantalla de ver Datos.
-        this.dispose();
-        VerDatos pantalla = new VerDatos();
-        pantalla.setVisible(true);   // visible a true
-        pantalla.setLocationRelativeTo(null); // aparezca la pantalla en el centro 
+        FormUtils.cambiarVentana(this, new VerDatos("Administrador"));
     }//GEN-LAST:event_jMVerDatosActionPerformed
 
     private void btnUseerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseerActionPerformed
-        this.dispose();
-        VerUsuarios pantalla = new VerUsuarios();
-        pantalla.setVisible(true);   // visible a true
-        pantalla.setLocationRelativeTo(null);
+        FormUtils.cambiarVentana(this, new VerUsuarios());
     }//GEN-LAST:event_btnUseerActionPerformed
 
     private void jmUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmUsuariosActionPerformed
-        this.dispose();
-        VerUsuarios pantalla = new VerUsuarios();
-        pantalla.setVisible(true);   // visible a true
-        pantalla.setLocationRelativeTo(null);
+        FormUtils.cambiarVentana(this, new VerUsuarios());
     }//GEN-LAST:event_jmUsuariosActionPerformed
 
     private void btnCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCitaActionPerformed
-        this.dispose();
-        FrmCitas frm = new FrmCitas("Administrador");
-        frm.setVisible(true);
-        frm.setLocationRelativeTo(null);
+        FormUtils.cambiarVentana(this, new FrmCitas("Administrador"));
     }//GEN-LAST:event_btnCitaActionPerformed
 
     private void jmCitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmCitasActionPerformed
-        this.dispose();
-        FrmCitas frm = new FrmCitas("Administrador");
-        frm.setVisible(true);
-        frm.setLocationRelativeTo(null);
+        FormUtils.cambiarVentana(this, new FrmCitas("Administrador"));
     }//GEN-LAST:event_jmCitasActionPerformed
 
-    
+    private void btnServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServicioActionPerformed
+        FormUtils.cambiarVentana(this, new FrmServicios("Administrador"));
+    }//GEN-LAST:event_btnServicioActionPerformed
+
+    private void jmServiciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmServiciosActionPerformed
+        FormUtils.cambiarVentana(this, new FrmServicios("Administrador"));
+    }//GEN-LAST:event_jmServiciosActionPerformed
+
+    private void jmSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmSalirActionPerformed
+        FormUtils.cambiarVentana(this, new FrmLogin());
+    }//GEN-LAST:event_jmSalirActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -330,6 +344,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnCargar;
     private javax.swing.JButton btnCita;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JButton btnServicio;
     private javax.swing.JButton btnUseer;
     private javax.swing.JButton btnVer;
     private javax.swing.JLabel jLabel1;
@@ -342,6 +357,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JMenuItem jmAyuda;
     private javax.swing.JMenuItem jmCitas;
+    private javax.swing.JMenuItem jmSalir;
+    private javax.swing.JMenuItem jmServicios;
     private javax.swing.JMenuItem jmUsuarios;
     // End of variables declaration//GEN-END:variables
 }

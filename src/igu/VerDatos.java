@@ -1,16 +1,13 @@
 package igu;
 
+import controlador.ControlMascotas;
 import java.awt.Image;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
-import logica.Controladora;
-import logica.FormUtils;
+import utils.FormUtils;
 import logica.Mascotas;
-import logica.Servicios;
-import Controlador.MascotasJpaController;
 
 /**
  * Ventana de visualización de datos en el sistema de gestión de peluquería
@@ -30,19 +27,37 @@ public class VerDatos extends javax.swing.JFrame {
     /**
      * Instancia de la clase Controladora para acceder a la lógica de negocio.
      */
-    Controladora control = null;
+    ControlMascotas controlMascotas = null;
+
+    /**
+     * Rol del usuario que abrió la ventana (Ej. "Recepcionista", "Trabajador").
+     */
+    private String rolActual;
 
     /**
      * Constructor que inicializa la ventana de visualización de datos.
      *
      * Configura los componentes gráficos, establece el ícono de la ventana y
      * prepara la interfaz para mostrar registros.
+     *
+     * @param rolActual
      */
-    public VerDatos() {
-        control = new Controladora();
+    public VerDatos(String rolActual) {
         initComponents();
         Image icon = new ImageIcon("./icon/logo2.png").getImage();
         this.setIconImage(icon);
+        this.rolActual = rolActual.trim().toLowerCase();
+        this.controlMascotas = new ControlMascotas();
+        DefaultTableModel modelo = new DefaultTableModel(
+                new String[]{
+                    "Id", "Nombre", "Raza", "Color", "Alergico", "At. Esp.",
+                    "Dueño", "Tlf", "Observ.", "Servicios"
+                }, 0
+        );
+        tablaMascota.setModel(modelo);
+
+        aplicarPermisos();
+
     }
 
     /**
@@ -117,8 +132,8 @@ public class VerDatos extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         btnEditar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -238,74 +253,55 @@ public class VerDatos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnSalir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalir1ActionPerformed
-        FormUtils.cambiarVentana(this, new Principal());
+       FormUtils.salirSegunRol(rolActual, this);
     }//GEN-LAST:event_btnSalir1ActionPerformed
 
     private void verTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verTodoActionPerformed
         cargarTabla();
     }//GEN-LAST:event_verTodoActionPerformed
 
-    /**
-     * Acción ejecutada al hacer clic en el botón "Buscar".
-     *
-     * Este método solicita al usuario que introduzca el nombre de un dueño
-     * mediante un cuadro de diálogo. Si se proporciona un nombre válido, se
-     * consulta la base de datos a través de {@code MascotasJpaController} para
-     * obtener todas las mascotas asociadas a ese dueño.
-     *
-     * La tabla de mascotas se limpia antes de mostrar los nuevos resultados. Si
-     * no se encuentran coincidencias, se muestra un mensaje informativo. Si no
-     * se introduce ningún nombre, se muestra una advertencia al usuario.
-     *
-     */
+    private void aplicarPermisos() {
+        if (rolActual == null) {
+            return;
+        }
+
+        String rol = rolActual.toLowerCase();
+
+        if (rol.equals("recepcionista") || rol.equals("trabajador")) {
+            btnEditar.setEnabled(false);
+            btnEliminar.setEnabled(false);
+        }
+    }
+
+
+    public void cargarTabla() {
+        DefaultTableModel modelo = (DefaultTableModel) tablaMascota.getModel();
+        modelo.setRowCount(0);
+
+        for (Object[] fila : controlMascotas.obtenerFilasTabla(controlMascotas.traerMascotas())) {
+            modelo.addRow(fila);
+        }
+    }
+
     private void buscarDuenio() {
+        String nombre = JOptionPane.showInputDialog(this, "Introduce el nombre del dueño:");
 
-        String nombreBuscado = JOptionPane.showInputDialog(this, "Introduce el nombre del dueño:");
+        if (nombre == null || nombre.trim().isEmpty()) {
+            FormUtils.mostrarMensaje("No se introdujo ningún nombre.", "Error", "Búsqueda");
+            return;
+        }
 
-        if (nombreBuscado != null && !nombreBuscado.trim().isEmpty()) {
-            MascotasJpaController controlMascota = new MascotasJpaController();
-            List<Mascotas> lista = controlMascota.findMascotasByNombreDueno(nombreBuscado.trim());
-            DefaultTableModel modelo = (DefaultTableModel) tablaMascota.getModel();
+        List<Mascotas> lista = controlMascotas.buscarPorNombreDuenio(nombre.trim());
+        DefaultTableModel modelo = (DefaultTableModel) tablaMascota.getModel();
+        modelo.setRowCount(0);
 
-            modelo.setRowCount(0); // Limpiar tabla
+        if (lista.isEmpty()) {
+            FormUtils.mostrarMensaje("No se encontraron mascotas para ese dueño.", "Info", "Sin resultados");
+            return;
+        }
 
-            if (lista.isEmpty()) {
-                FormUtils.mostrarMensaje("No se encontraron mascotas para ese dueño: " + nombreBuscado, "Error", "Error en la búsqueda");
-            } else {
-                for (Mascotas m : lista) {
-                    // Construir un string con todos los servicios de la mascota
-                    String serviciosTexto = "";
-                    if (m.getServicios() != null && !m.getServicios().isEmpty()) {
-                        StringBuilder sb = new StringBuilder();
-                        for (Servicios s : m.getServicios()) {
-                            sb.append(s.getTipoServicios())
-                                    .append(" (")
-                                    .append(s.getPrecio())
-                                    .append("€), ");
-                        }
-                        // Quitar la última coma y espacio
-                        serviciosTexto = sb.substring(0, sb.length() - 2);
-                    } else {
-                        serviciosTexto = "Sin servicios";
-                    }
-
-                    // Añadir fila a la tabla incluyendo los servicios
-                    modelo.addRow(new Object[]{
-                        m.getNum_cliente(),
-                        m.getNombreMas(),
-                        m.getRaza(),
-                        m.getColor(),
-                        m.getAlergico(),
-                        m.getAtencion_especial(),
-                        m.getUnDuenio().getNombre(),
-                        m.getUnDuenio().getTelefono(),
-                        m.getObservaciones(),
-                        serviciosTexto // ✅ nueva columna con servicios
-                    });
-                }
-            }
-        } else {
-            FormUtils.mostrarMensaje("No se introdujo ningún nombre.", "Error", "Error en la búsqueda");
+        for (Object[] fila : controlMascotas.obtenerFilasTabla(lista)) {
+            modelo.addRow(fila);
         }
     }
 
@@ -323,31 +319,23 @@ public class VerDatos extends javax.swing.JFrame {
      * apropiados.
      */
     private void eliminarMasco() {
-        // si hay linea
-        if (tablaMascota.getRowCount() > 0) {
-            int filaSeleccionada = tablaMascota.getSelectedRow();
-            if (filaSeleccionada != -1) {
-                // Obtener nombre de la mascota si está en la columna 1 (ajusta si es otra)
-                String nombreMascota = String.valueOf(tablaMascota.getValueAt(filaSeleccionada, 1));
-                int num_cliente = Integer.parseInt(String.valueOf(tablaMascota.getValueAt(filaSeleccionada, 0)));
-
-                int confirmacion = JOptionPane.showConfirmDialog(this,
-                        "¿Estás segura de eliminar a la mascota \"" + nombreMascota + "\"?\nSe perderán sus datos.",
-                        "Confirmar eliminación",
-                        JOptionPane.YES_NO_OPTION);
-
-                if (confirmacion == JOptionPane.YES_OPTION) {
-                    control.borrarMascota(num_cliente);
-                    FormUtils.mostrarMensaje("Mascota eliminada correctamente", "Info", "Borrado Mascota");
-                    cargarTabla();
-                }
-            } else {
-                FormUtils.mostrarMensaje("No se seleccionó ninguna mascota", "Error", "Error al eliminar");
-            }
-        } else {
-            FormUtils.mostrarMensaje("No hay nada para eliminar en la tabla", "Error", "Error al eliminar");
+        if (tablaMascota.getSelectedRow() == -1) {
+            FormUtils.mostrarMensaje("No se seleccionó ninguna mascota.", "Error", "Eliminar");
+            return;
         }
 
+        int num_cliente = (int) tablaMascota.getValueAt(tablaMascota.getSelectedRow(), 0);
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Seguro que deseas eliminar esta mascota?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            controlMascotas.borrarMascota(num_cliente);
+            cargarTabla();
+            FormUtils.mostrarMensaje("Mascota eliminada correctamente.", "Info", "Eliminada");
+        }
     }
 
     /**
@@ -362,112 +350,18 @@ public class VerDatos extends javax.swing.JFrame {
      * apropiados.
      */
     private void editarMasco() {
-        // si hay linea
-        if (tablaMascota.getRowCount() > 0) {
-            // si el resultado es -1 no hay nada seleccionado
-            if (tablaMascota.getSelectedRow() != -1) {
-                //obtengo la id de la mascota a editar
-                int num_cliente = Integer.parseInt(String.valueOf(tablaMascota.getValueAt(tablaMascota.getSelectedRow(), 0)));
-
-                FormUtils.cambiarVentana(this, new ModificarDatos(num_cliente));
-       
-            } else {
-                FormUtils.mostrarMensaje("No se seleccionó ninguna mascota", "Error", "Error al eliminar");
-            }
-        } else {
-            FormUtils.mostrarMensaje("No hay nada para eliminar en la table", "Error", "Error al eliminar");
+        if (tablaMascota.getSelectedRow() == -1) {
+            FormUtils.mostrarMensaje("No se seleccionó ninguna mascota", "Error", "Editar");
+            return;
         }
+
+        int num_cliente = (int) tablaMascota.getValueAt(tablaMascota.getSelectedRow(), 0);
+
+        FormUtils.cambiarVentana(this, new ModificarDatos(num_cliente, rolActual));
+
     }
 
-    /**
-     * Carga los datos de todas las mascotas registradas en la base de datos y
-     * los muestra en la tabla de la interfaz gráfica.
-     *
-     * Este método define un modelo de tabla no editable, establece los
-     * encabezados de columna y recorre la lista de mascotas obtenida desde la
-     * capa de control.
-     *
-     * Cada mascota se representa como una fila con sus atributos y los de su
-     * dueño, incluyendo número de cliente, nombre, raza, color, alergias,
-     * atención especial, nombre del dueño, teléfono y observaciones.
-     *
-     * Si la lista de mascotas no es nula, se actualiza el componente
-     * {@code tablaMascota} con el modelo generado.
-     */
-    public void cargarTabla() {
-
-        // definir modelo de la tabla
-        DefaultTableModel modeloTabla = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // no editable desde la interfaz
-            }
-        };
-
-        // establecemos los nombres de la columna (añadimos Servicios)
-        String titulos[] = {"Id", "Nombre", "Raza", "Color", "Alergico", "At. Esp.", "Dueño", "Tlf", "Observ.", "Servicios"};
-        modeloTabla.setColumnIdentifiers(titulos);
-
-        // carga de los datos desde la BD
-        List<Mascotas> listaMascota = control.traerMascotas();
-
-        // recorrer la lista y mostrar cada uno de los elementos en la tabla
-        if (listaMascota != null) {
-            for (Mascotas masco : listaMascota) {
-
-                // Construir texto con los servicios
-                String serviciosTexto = "Sin servicios";
-                if (masco.getServicios() != null && !masco.getServicios().isEmpty()) {
-                    StringBuilder sb = new StringBuilder();
-                    for (Servicios s : masco.getServicios()) {
-                        sb.append(s.getTipoServicios())
-                                .append(" (")
-                                .append(s.getPrecio())
-                                .append("€), ");
-                    }
-                    // quitar la última coma y espacio
-                    serviciosTexto = sb.substring(0, sb.length() - 2);
-                }
-
-                Object[] objeto = {
-                    masco.getNum_cliente(),
-                    masco.getNombreMas(),
-                    masco.getRaza(),
-                    masco.getColor(),
-                    masco.getAlergico(),
-                    masco.getAtencion_especial(),
-                    masco.getUnDuenio().getNombre(),
-                    masco.getUnDuenio().getTelefono(),
-                    masco.getObservaciones(),
-                    serviciosTexto
-                };
-
-                modeloTabla.addRow(objeto);
-            }
-            tablaMascota.setModel(modeloTabla);  // asignar modelo a la tabla
-
-            // Ajustes de ancho de columnas
-            TableColumnModel columnModel = tablaMascota.getColumnModel();
-
-            columnModel.getColumn(0).setPreferredWidth(30);
-            columnModel.getColumn(0).setMinWidth(30);
-            columnModel.getColumn(0).setMaxWidth(30);
-
-            columnModel.getColumn(1).setPreferredWidth(80);
-            columnModel.getColumn(2).setPreferredWidth(100);
-            columnModel.getColumn(3).setPreferredWidth(70);
-            columnModel.getColumn(4).setPreferredWidth(40);
-
-            columnModel.getColumn(5).setPreferredWidth(40);
-
-            columnModel.getColumn(6).setPreferredWidth(80);
-            columnModel.getColumn(7).setPreferredWidth(80);
-
-            columnModel.getColumn(8).setPreferredWidth(150);
-            columnModel.getColumn(9).setMinWidth(150);
-        }
-    }
-
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;

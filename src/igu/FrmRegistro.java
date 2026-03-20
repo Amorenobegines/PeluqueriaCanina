@@ -1,11 +1,10 @@
 package igu;
 
+import controlador.ControlUsuarios;
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import logica.Controladora;
-import logica.FormUtils;
-import logica.InputKey;
-import logica.Usuarios;
+import utils.FormUtils;
+import utils.InputKey;
 
 /**
  * Ventana de diálogo para el registro de nuevos usuarios en el sistema de
@@ -22,7 +21,7 @@ public class FrmRegistro extends javax.swing.JFrame {
     /**
      * Instancia de la clase Controladora para acceder a la lógica de negocio.
      */
-    Controladora control = null;
+    ControlUsuarios controlUsuario = null;
 
     /**
      * Constructor que inicializa el formulario de registro.
@@ -32,7 +31,7 @@ public class FrmRegistro extends javax.swing.JFrame {
      * mientras está activo.
      */
     public FrmRegistro(java.awt.Frame parent, boolean modal) {
-        control = new Controladora();
+        controlUsuario = new ControlUsuarios();
         initComponents();
         setLocationRelativeTo(null);
         Image icon = new ImageIcon("./icon/logo2.png").getImage();
@@ -264,58 +263,30 @@ public class FrmRegistro extends javax.swing.JFrame {
      * electrónico.
      *
      */
-    private void registrarUsuario() {
+   private void registrarUsuario() {
 
-        String nombre = txtNombre.getText().trim();
-        String apellidos = txtApellidos.getText().trim();
-        String email = txtEmail.getText().trim();
-        String pass = txtPassword.getText().trim();
-        String rolSeleccionado = comboTipo.getSelectedItem().toString();
+    String nombre = txtNombre.getText().trim();
+    String apellidos = txtApellidos.getText().trim();
+    String email = txtEmail.getText().trim();
+    String pass = txtPassword.getText().trim();
+    String rolSeleccionado = comboTipo.getSelectedItem().toString();
 
-        // Validar campos vacíos
-        if (nombre.isEmpty() || apellidos.isEmpty() || email.isEmpty() || pass.isEmpty()) {
-            FormUtils.mostrarMensaje("Debe completar todos los campos.", "Error", "Error al guardar");
+    try {
+        // Delegar toda la lógica al controlador
+        controlUsuario.registrarUsuario(nombre, apellidos, email, pass, rolSeleccionado);
 
-            return;
-        }
+        // Mostrar mensaje de éxito
+        FormUtils.mostrarMensaje("Usuario registrado correctamente", "Info", "Registro");
 
-        // Validar formato de email
-        String patronEmail = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
-        if (!email.matches(patronEmail)) {
-            FormUtils.mostrarMensaje("El correo electrónico no tiene un formato válido.", "Error", "Error al guardar");
+        // Limpiar formulario
+        FormUtils.limpiarFormulario(rootPane);
 
-            return;
-        }
-
-        //  Validar selección de rol
-        if (rolSeleccionado.equalsIgnoreCase("Seleccionar")) {
-            FormUtils.mostrarMensaje("Debe seleccionar un rol válido.", "Error", "Error al guardar");
-            return;
-        }
-
-        // Validar email duplicado
-        boolean existeEmail = false;
-        for (Usuarios u : control.traerUsuarios()) {
-            if (u.getEmail().equalsIgnoreCase(email)) {
-                existeEmail = true;
-                break;
-            }
-        }
-
-        if (existeEmail) {
-            FormUtils.mostrarMensaje("El correo " + email + " ya está registrado. Use otro diferente.", "Error", "Error al guardar");
-            return;
-        }
-
-        // Guardar usuario si todo está correcto
-        try {
-            control.guardarUsuario(nombre, apellidos, email, pass, rolSeleccionado);
-            FormUtils.mostrarMensaje("Usuario guardado correctamente.", "Info", "Usuario guardado ");
-            FormUtils.limpiarFormulario(rootPane);
-        } catch (Exception ex) {
-            FormUtils.mostrarMensaje("Error al guardar el usuario: " + ex.getMessage(), "Error", "Usuario no guardado ");
-        }
+    } catch (Exception ex) {
+        // Mostrar mensaje de error
+        FormUtils.mostrarMensaje(ex.getMessage(), "Error", "Registro");
     }
+}
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel btnInicio;

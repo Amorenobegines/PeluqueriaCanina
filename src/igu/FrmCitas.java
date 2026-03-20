@@ -1,32 +1,28 @@
 package igu;
 
-import java.awt.Font;
 import java.awt.Image;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import logica.Cita;
-import logica.Controladora;
-import logica.FormUtils;
+import utils.FormUtils;
 import logica.Mascotas;
-import logica.Servicios;
-import Controlador.CitaJpaController;
-import Controlador.ControladoraPersistencia;
+import logica.Servicios; 
+import controlador.ControlCitas;
+import controlador.ControlMascotas;
+import controlador.ControlServicios;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 
 /**
  * Clase que representa la ventana principal de gestión de citas en la
@@ -61,18 +57,9 @@ public class FrmCitas extends javax.swing.JFrame {
     /**
      * LLamamiento a la clase Controladora
      */
-    Controladora control = null;
-
-     /**
-     * LLamamiento a la clase ControladoraPersistencia
-     */
-    ControladoraPersistencia controlPersis = null;
-
-    /**
-     * Bandera de validación que indica si los campos están vacíos. Inicialmente
-     * se establece en false.
-     */
-    boolean vacio = false;      // boolean para validar con valor false si en los campos se han introducido datos
+    ControlCitas controlCitas = null;
+    ControlMascotas controlMascotas = null;
+    ControlServicios controlServicios = null;
 
     /**
      * Rol del usuario que abrió la ventana (Ej. "Recepcionista", "Trabajador").
@@ -91,8 +78,9 @@ public class FrmCitas extends javax.swing.JFrame {
      * controlar la interfaz y permisos
      */
     public FrmCitas(String rol) {
-        control = new Controladora();
-        controlPersis = new ControladoraPersistencia();
+        controlCitas = new ControlCitas();
+        controlServicios = new ControlServicios();
+        controlMascotas = new ControlMascotas();
         initComponents();
         setLocationRelativeTo(null);
         Image icon = new ImageIcon("./icon/logo2.png").getImage();
@@ -118,15 +106,14 @@ public class FrmCitas extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         cmbMascota1 = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jBoxBanio = new javax.swing.JCheckBox();
-        jBoxCorte = new javax.swing.JCheckBox();
-        jBoxUnias = new javax.swing.JCheckBox();
         jsFecha = new javax.swing.JSpinner();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        listaServicios = new javax.swing.JList<Servicios>() ;
         jLabel1 = new javax.swing.JLabel();
         btnEliminar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         btnVerTodo = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Citas - Administrador  - Recepcionista");
@@ -149,6 +136,11 @@ public class FrmCitas extends javax.swing.JFrame {
 
             }
         ));
+        tblCitas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCitasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblCitas);
 
         btnLimpiar.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
@@ -173,7 +165,6 @@ public class FrmCitas extends javax.swing.JFrame {
 
         btnSalir.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
         btnSalir.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\salir.png")); // NOI18N
-        btnSalir.setText("Atras");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
@@ -184,25 +175,19 @@ public class FrmCitas extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         cmbMascota1.setBorder(javax.swing.BorderFactory.createTitledBorder("Mascotas"));
+        cmbMascota1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbMascota1ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Fecha / Hora:");
 
-        jLabel11.setText("Servicios:");
-        jLabel11.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-
-        jBoxBanio.setBackground(new java.awt.Color(204, 204, 255));
-        jBoxBanio.setText("Baño");
-        jBoxBanio.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-
-        jBoxCorte.setBackground(new java.awt.Color(204, 204, 255));
-        jBoxCorte.setText("Corte");
-        jBoxCorte.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-
-        jBoxUnias.setBackground(new java.awt.Color(204, 204, 255));
-        jBoxUnias.setText("Uñas");
-        jBoxUnias.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-
         jsFecha.setModel(new javax.swing.SpinnerDateModel());
+
+        listaServicios.setBorder(javax.swing.BorderFactory.createTitledBorder("Servicios:"));
+        listaServicios.setModel(new DefaultListModel<Servicios>());
+        jScrollPane3.setViewportView(listaServicios);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -210,41 +195,31 @@ public class FrmCitas extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jsFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jBoxBanio, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBoxCorte, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBoxUnias, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jsFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(cmbMascota1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(92, 92, 92))
+                .addGap(21, 21, 21))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jsFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jBoxBanio)
-                    .addComponent(jBoxCorte)
-                    .addComponent(jBoxUnias))
-                .addContainerGap(19, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(cmbMascota1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(jsFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(cmbMascota1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 2, 24)); // NOI18N
@@ -260,7 +235,7 @@ public class FrmCitas extends javax.swing.JFrame {
             }
         });
 
-        btnBuscar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnBuscar.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
         btnBuscar.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\buscar1.png")); // NOI18N
         btnBuscar.setText("Buscar");
         btnBuscar.setToolTipText("Buscar por fecha");
@@ -280,66 +255,79 @@ public class FrmCitas extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Segoe Print", 1, 18)); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Alicia\\Documents\\NetBeansProjects\\PeluqueriaCanina\\icon\\editar.png")); // NOI18N
+        jButton1.setText("Editar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(228, 228, 228))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(254, 254, 254)
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 528, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(btnLimpiar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnEliminar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+                            .addComponent(btnEliminar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnGuardar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnBuscar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnVerTodo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(28, Short.MAX_VALUE))
+                            .addComponent(btnVerTodo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(0, 19, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnVerTodo, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                        .addComponent(btnVerTodo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnGuardar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnEliminar)
                         .addGap(18, 18, 18)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16)
-                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnLimpiar)
+                        .addComponent(btnBuscar)
                         .addGap(18, 18, 18)
-                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSalir))
+                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addGap(39, 39, 39))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 6, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -361,11 +349,16 @@ public class FrmCitas extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargarMascotas();
+        cargarServicios();
         cargarTabla();
     }//GEN-LAST:event_formWindowOpened
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        eliminarCita();
+        try {
+            eliminarCita();
+        } catch (Exception ex) {
+            Logger.getLogger(FrmCitas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -376,116 +369,71 @@ public class FrmCitas extends javax.swing.JFrame {
         cargarTabla();
     }//GEN-LAST:event_btnVerTodoActionPerformed
 
-    /**
-     * Elimina la cita seleccionada en la tabla {@code tblCitas}.
-     * <p>
-     * Este método verifica si el usuario ha seleccionado una fila en la tabla.
-     * Si no hay selección, se muestra un mensaje solicitando seleccionar una
-     * cita. Si hay una fila seleccionada, se obtiene el ID de la cita y se
-     * solicita confirmación al usuario mediante un cuadro de diálogo.
-     * </p>
-     * <p>
-     * Si el usuario confirma la eliminación, se llama al método
-     * {@code eliminarCita} del controlador para eliminar la cita de la base de
-     * datos. Luego se muestra un mensaje de éxito y se recarga la tabla para
-     * reflejar los cambios. En caso de error durante la eliminación, se muestra
-     * un mensaje con la descripción del error.
-     * </p>
-     */
-    private void eliminarCita() {
-        int filaSeleccionada = tblCitas.getSelectedRow();
+    private void cmbMascota1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMascota1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbMascota1ActionPerformed
 
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Selecciona una cita para eliminar");
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            editarCitas();
+        } catch (Exception ex) {
+            Logger.getLogger(FrmCitas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void tblCitasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCitasMouseClicked
+        clickTablaCita();
+    }//GEN-LAST:event_tblCitasMouseClicked
+/**
+ * 
+ * @throws Exception 
+ */
+    private void eliminarCita() throws Exception {
+        int fila = tblCitas.getSelectedRow();
+        if (fila == -1) {
             return;
         }
 
-        // Obtener el ID de la cita desde la tabla
-        int idCita = (int) tblCitas.getValueAt(filaSeleccionada, 0);
-
-        // Confirmación
-        int opcion = JOptionPane.showConfirmDialog(this,
-                "¿Seguro que deseas eliminar la cita seleccionada?",
-                "Confirmar eliminación",
-                JOptionPane.YES_NO_OPTION);
-
-        if (opcion == JOptionPane.YES_OPTION) {
-            try {
-                control.eliminarCita(idCita);
-                JOptionPane.showMessageDialog(this, "Cita eliminada correctamente");
-                cargarTabla(); // refrescar la tabla
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error al eliminar cita: " + e.getMessage());
-            }
-        }
+        int id = (int) tblCitas.getValueAt(fila, 0);
+        controlCitas.eliminarCita(id);
+        cargarTabla();
+       
     }
 
-    /**
-     * Permite buscar citas en la tabla según una fecha específica ingresada por
-     * el usuario.
-     * <p>
-     * Este método solicita al usuario que introduzca una fecha en formato
-     * "yyyy-MM-dd" mediante un cuadro de diálogo. Luego convierte la cadena
-     * ingresada a un objeto {@link LocalDate} y utiliza el
-     * {@link CitaJpaController} para obtener las citas que coincidan con esa
-     * fecha.
-     * </p>
-     * <p>
-     * Si se encuentran citas, se muestran en {@code tblCitas} incluyendo los
-     * servicios asociados a cada cita. Si no hay coincidencias, se muestra un
-     * mensaje informando que no se encontraron citas para la fecha indicada. Si
-     * el formato de la fecha es incorrecto, se muestra un mensaje de error y se
-     * recarga la tabla con todas las citas.
-     * </p>
-     * <p>
-     * En caso de que el usuario no ingrese ninguna fecha, se muestra un mensaje
-     * indicando la falta de entrada y se recarga la tabla con todas las citas.
-     * </p>
-     */
     private void buscarFecha() {
         String fechaStr = JOptionPane.showInputDialog(this, "Introduce la fecha (yyyy-MM-dd):");
 
-        if (fechaStr != null && !fechaStr.trim().isEmpty()) {
-            try {
-                LocalDate fecha = LocalDate.parse(fechaStr.trim()); // convierte String a LocalDate
-                CitaJpaController controlCita = new CitaJpaController();
-                List<Cita> lista = controlCita.findCitasByFecha(fecha);
-                DefaultTableModel modelo = (DefaultTableModel) tblCitas.getModel();
-
-                modelo.setRowCount(0); // Limpiar tabla
-
-                if (lista.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "No se encontraron citas para ese día: " + fecha);
-                } else {
-                    for (Cita c : lista) {
-                        // Construir un string con todos los servicios de la mascota
-                        String serviciosTexto = "Sin servicios";
-                        if (c.getServicio() != null && !c.getServicio().isEmpty()) {
-                            StringBuilder sb = new StringBuilder();
-                            for (Servicios s : c.getServicio()) {
-                                sb.append(s.getTipoServicios())
-                                        .append(" (")
-                                        .append(s.getPrecio())
-                                        .append("€), ");
-                            }
-                            serviciosTexto = sb.substring(0, sb.length() - 2); // quitar coma final
-                        }
-
-                        // Añadir fila a la tabla incluyendo los servicios
-                        modelo.addRow(new Object[]{
-                            c.getId(),
-                            c.getFechaHora(),
-                            c.getMascota().getNombreMas(),
-                            serviciosTexto
-                        });
-                    }
-                }
-            } catch (DateTimeParseException e) {
-                JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Usa yyyy-MM-dd.");
-                cargarTabla();
-            }
-        } else {
+        if (fechaStr == null || fechaStr.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "No se introdujo ninguna fecha.");
+            cargarTabla();
+            return;
+        }
+
+        try {
+            LocalDate fecha = LocalDate.parse(fechaStr.trim());
+            List<Cita> lista = controlCitas.buscarPorFecha(fecha);
+
+            DefaultTableModel modelo = (DefaultTableModel) tblCitas.getModel();
+            modelo.setRowCount(0);
+
+            if (lista.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No se encontraron citas para ese día: " + fecha);
+                return;
+            }
+
+            for (Cita c : lista) {
+                String serviciosTexto = controlCitas.convertirServiciosTexto(c);
+
+                modelo.addRow(new Object[]{
+                    c.getId(),
+                    c.getFechaHora(),
+                    c.getMascota().getNombreMas(),
+                    serviciosTexto
+                });
+            }
+
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Usa yyyy-MM-dd.");
             cargarTabla();
         }
     }
@@ -508,29 +456,18 @@ public class FrmCitas extends javax.swing.JFrame {
      * </ul>
      */
     private void cargarTabla() {
-        // Modelo de tabla que no permite edición en las celdas
         DefaultTableModel modelo = new DefaultTableModel(
                 new String[]{"ID", "Fecha/Hora", "Mascota", "Servicios"}, 0
         ) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // todas las celdas no editables
+                return false;
             }
         };
 
-        for (Cita c : control.traerCitas()) {
-            // Convertir la lista de servicios en un texto legible
-            String serviciosTexto = "Sin Servicios";
-            if (c.getServicio() != null && !c.getServicio().isEmpty()) {
-                StringBuilder sb = new StringBuilder();
-                for (Servicios s : c.getServicio()) {
-                    sb.append(s.getTipoServicios())
-                            .append(" (")
-                            .append(s.getPrecio())
-                            .append("€), ");
-                }
-                serviciosTexto = sb.substring(0, sb.length() - 2); // quitar coma final
-            }
+        for (Cita c : controlCitas.traerCitas()) {
+
+            String serviciosTexto = controlCitas.convertirServiciosTexto(c);
 
             modelo.addRow(new Object[]{
                 c.getId(),
@@ -541,19 +478,41 @@ public class FrmCitas extends javax.swing.JFrame {
         }
 
         tblCitas.setModel(modelo);
-        // Ajustes de ancho de columnas
-        TableColumnModel columnModel = tblCitas.getColumnModel();
 
+        TableColumnModel columnModel = tblCitas.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(40);
         columnModel.getColumn(0).setMinWidth(40);
         columnModel.getColumn(0).setMaxWidth(40);
-
         columnModel.getColumn(1).setPreferredWidth(150);
-
         columnModel.getColumn(2).setPreferredWidth(100);
-
         columnModel.getColumn(3).setPreferredWidth(300);
         columnModel.getColumn(3).setMinWidth(200);
+         FormUtils.limpiarFormulario(this);
+    }
+
+    private void clickTablaCita() {
+        int fila = tblCitas.getSelectedRow();
+        if (fila == -1) {
+            return;
+        }
+
+        int idCita = (int) tblCitas.getValueAt(fila, 0);
+        Cita cita = controlCitas.traerCita(idCita);
+
+        cmbMascota1.setSelectedItem(cita.getMascota().getNombreMas());
+
+        Date fecha = Date.from(cita.getFechaHora()
+                .atZone(ZoneId.systemDefault()).toInstant());
+        jsFecha.setValue(fecha);
+
+        listaServicios.clearSelection();
+        DefaultListModel<Servicios> modelo = (DefaultListModel<Servicios>) listaServicios.getModel();
+
+        for (int i = 0; i < modelo.size(); i++) {
+            if (cita.getServicio().contains(modelo.get(i))) {
+                listaServicios.addSelectionInterval(i, i);
+            }
+        }
     }
 
     private Map<String, Mascotas> indexMascotas = new HashMap<>();
@@ -576,7 +535,8 @@ public class FrmCitas extends javax.swing.JFrame {
      * </ul>
      */
     private void cargarMascotas() {
-        List<Mascotas> listaMascotas = control.traerMascotas();
+
+        List<Mascotas> listaMascotas = controlMascotas.traerMascotas();
         cmbMascota1.removeAllItems(); // limpiar antes
         indexMascotas.clear();        // limpiar el mapa también
 
@@ -587,103 +547,40 @@ public class FrmCitas extends javax.swing.JFrame {
 
     }
 
-    /**
-     * Guarda una nueva cita en la base de datos a partir de los datos
-     * ingresados en la interfaz.
-     * <p>
-     * Este método realiza las siguientes acciones:
-     * <ul>
-     * <li>Obtiene la fecha seleccionada desde el {@link JSpinner} y la
-     * convierte a {@link LocalDateTime}.</li>
-     * <li>Recupera la mascota seleccionada desde el {@link JComboBox} usando el
-     * mapa {@code indexMascotas}.</li>
-     * <li>Verifica qué servicios fueron seleccionados mediante los
-     * {@link JCheckBox} correspondientes.</li>
-     * <li>Valida que todos los campos obligatorios estén completos. Si falta
-     * algún dato, muestra un mensaje de advertencia.</li>
-     * <li>Recupera los servicios seleccionados desde la base de datos.</li>
-     * <li>Crea un objeto {@link Cita} con los datos ingresados y lo guarda en
-     * la base de datos mediante el controlador {@code control}.</li>
-     * <li>Muestra un mensaje de confirmación de guardado y actualiza la tabla
-     * de citas llamando a {@link #cargarTabla()}.</li>
-     * <li>Limpia los campos del formulario utilizando
-     * {@code FormUtils.limpiarFormulario(rootPane)}.</li>
-     * </ul>
-     *
-     * @see Cita
-     * @see Mascotas
-     * @see Servicios
-     * @see FormUtils#limpiarFormulario(java.awt.Container)
-     */
+    private void cargarServicios() {
+        listaServicios.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+        DefaultListModel<Servicios> modelo = new DefaultListModel<>();
+        for (Servicios s : controlServicios.traerServicios()) {
+            modelo.addElement(s);
+        }
+        listaServicios.setModel(modelo);
+
+    }
+
     private void guardarCitas() {
-        // Obtener la fecha directamente del JSpinner
-        Date fechaSeleccionada = (Date) jsFecha.getValue();
+        Mascotas mascota = indexMascotas.get(cmbMascota1.getSelectedItem());
+        LocalDateTime fecha = controlCitas.convertirFecha((Date) jsFecha.getValue());
+        List<Servicios> servicios = listaServicios.getSelectedValuesList();
 
-        // Convertir a LocalDateTime para JPA
-        LocalDateTime fechaHora = fechaSeleccionada.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
+        controlCitas.guardarCita(mascota.getNum_cliente(), fecha, servicios);
+        cargarTabla();
+    }
 
-        // Recuperar la mascota seleccionada usando el mapa indexMascotas
-        String nombre = (String) cmbMascota1.getSelectedItem();
-        Mascotas mascota = indexMascotas.get(nombre);
-
-        boolean banio = jBoxBanio.isSelected();
-        boolean corte = jBoxCorte.isSelected();
-        boolean unias = jBoxUnias.isSelected();
-
-        // Validar campos vacíos
-        if (mascota == null || (!banio && !corte && !unias)) {
-            JLabel label = new JLabel("Por favor, completa todos los campos antes de guardar.");
-            label.setFont(new Font("Arial", Font.BOLD, 14));
-            JOptionPane optionPane = new JOptionPane(label, JOptionPane.WARNING_MESSAGE, JOptionPane.DEFAULT_OPTION);
-            JDialog dialog = optionPane.createDialog("Campos incompletos");
-            dialog.setAlwaysOnTop(true);
-            dialog.setVisible(true);
+    // BOTÓN EDITAR
+    private void editarCitas() throws Exception {
+        int fila = tblCitas.getSelectedRow();
+        if (fila == -1) {
             return;
         }
 
-        // Recoger servicios seleccionados desde la BD
-        List<Servicios> serviciosSeleccionados = new ArrayList<>();
+        int id = (int) tblCitas.getValueAt(fila, 0);
+        Mascotas mascota = indexMascotas.get(cmbMascota1.getSelectedItem());
+        LocalDateTime fecha = controlCitas.convertirFecha((Date) jsFecha.getValue());
+        List<Servicios> servicios = listaServicios.getSelectedValuesList();
 
-        if (banio) {
-            Servicios sBanio = controlPersis.buscarServicioPorNombre("Baño");
-            if (sBanio != null) {
-                serviciosSeleccionados.add(sBanio);
-            }
-        }
-        if (corte) {
-            Servicios sCorte = controlPersis.buscarServicioPorNombre("Corte de pelo");
-            if (sCorte != null) {
-                serviciosSeleccionados.add(sCorte);
-            }
-        }
-        if (unias) {
-            Servicios sUnias = controlPersis.buscarServicioPorNombre("Corte de uñas");
-            if (sUnias != null) {
-                serviciosSeleccionados.add(sUnias);
-            }
-        }
-
-        // Crear la cita
-        Cita cita = new Cita();
-        cita.setFechaHora(fechaHora);
-        cita.setMascota(mascota);
-        cita.setServicio(serviciosSeleccionados);
-
-        // Guardar la cita en BD
-        control.guardarCita(mascota.getNum_cliente(), fechaHora, serviciosSeleccionados);
-
-        JLabel label = new JLabel("Se guardó correctamente");
-        label.setFont(new Font("Arial", Font.BOLD, 14));
-        JOptionPane optionPane = new JOptionPane(label, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION);
-        JDialog dialog = optionPane.createDialog("Guardado");
-        dialog.setAlwaysOnTop(true);
-        dialog.setVisible(true);
-
+        controlCitas.editarCita(id, mascota, fecha, servicios);
         cargarTabla();
-        FormUtils.limpiarFormulario(rootPane);
-
     }
 
 
@@ -695,16 +592,15 @@ public class FrmCitas extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnVerTodo;
     private javax.swing.JComboBox<String> cmbMascota1;
-    private javax.swing.JCheckBox jBoxBanio;
-    private javax.swing.JCheckBox jBoxCorte;
-    private javax.swing.JCheckBox jBoxUnias;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSpinner jsFecha;
+    private javax.swing.JList<Servicios> listaServicios;
     private javax.swing.JTable tblCitas;
     // End of variables declaration//GEN-END:variables
 }

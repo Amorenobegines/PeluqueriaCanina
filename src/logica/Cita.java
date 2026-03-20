@@ -55,7 +55,7 @@ public class Cita implements Serializable {
      * Relación ManyToMany, mapeada con la tabla intermedia "cita_servicios".
      * Se permiten cascadas de persistencia y merge.
      */
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany()
     @JoinTable(
             name = "cita_servicios",
             joinColumns = @JoinColumn(name = "id_cita"),
